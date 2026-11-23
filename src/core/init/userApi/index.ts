@@ -250,5 +250,4 @@ export default async(setting: LX.AppSetting) => {
         break
     }
   })
-
 }
