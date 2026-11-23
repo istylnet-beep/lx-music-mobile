@@ -58,6 +58,7 @@ const Component = <S extends Sources>({ fontSize = 15, center, onSourceChange }:
       onPress={handleChangeSource}
       fontSize={fontSize}
       activeId={source}
+      btnStyle={{ minHeight: 46, borderRadius: 10, paddingHorizontal: 4 }}
     >
       <View style={styles.sourceMenu}>
         <Text style={{ textAlign: center ? 'center' : 'left' }} numberOfLines={1} size={fontSize}>{t(`source_${sourceNameType}_${source}`)}</Text>
