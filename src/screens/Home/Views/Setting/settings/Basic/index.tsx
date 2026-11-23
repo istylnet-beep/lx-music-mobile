@@ -4,6 +4,7 @@ import Theme from '../Theme'
 import Section from '../../components/Section'
 import Source from './Source'
 import SourceName from './SourceName'
+import MusicParser from './MusicParser'
 import Language from './Language'
 import FontSize from './FontSize'
 import ShareType from './ShareType'
@@ -40,6 +41,7 @@ export default memo(() => {
       <FontSize />
       <ShareType />
       <Source />
+      <MusicParser />
       <SourceName />
     </Section>
   )
