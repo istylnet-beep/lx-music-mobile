@@ -255,59 +255,28 @@ export default async(setting: LX.AppSetting) => {
     }
   })
 
-  // 野花🌷沿用應用程式原生自訂音源匯入流程，僅加入管理清單，不自動啟用。
-  // V5 使用全新標記，避免舊版 V4 已誤標完成而讓舊安裝跳過匯入。
-  // 完成後若使用者自行刪除，不會在每次啟動時重新加入。
-  let diagnosticList: LX.UserApi.UserApiInfo[] = []
-  let diagnosticStage = 'start'
+  // 野花🌷只補入自訂來源管理清單，不啟用、不切換目前音源。
+  // 不以舊版 migration marker 判斷是否已匯入；每次啟動只在清單缺少且使用者未自行刪除時補入。
+  // 使用者透過管理頁刪除野花時會寫入 tombstone，避免下次啟動重新加入。
   try {
-    const migrationCompleted = await getData<boolean>(storageDataPrefix.yehuaDefaultSourceMigrationV5)
-    console.info('[YehuaDiagnostic] marker:', migrationCompleted === true ? 'true' : migrationCompleted === false ? 'false' : 'undefined')
-    if (!migrationCompleted) {
-      diagnosticStage = 'read-list'
-      diagnosticList = await getUserApiList()
-      console.info('[YehuaDiagnostic] initial list:', diagnosticList.length, 'containsYehua:', diagnosticList.some(api => api.name.includes('野花')))
-      const existingYehuaApi = diagnosticList.find(api => api.name.includes('野花'))
-      if (!existingYehuaApi) {
-        diagnosticStage = 'decompress'
-        const script = getYehuaSource()
-        console.info('[YehuaDiagnostic] script:', 'type=' + typeof script, 'length=' + (typeof script === 'string' ? script.length : -1), 'headerValid=' + (typeof script === 'string' && script.trim().startsWith('/*')))
-        if (typeof script !== 'string' || !script.trim().startsWith('/*')) {
-          throw new Error('decompressed script invalid')
-        }
-        diagnosticStage = 'import'
-        await importUserApi(script)
-        console.info('[YehuaDiagnostic] importUserApi: success')
-      } else {
-        console.info('[YehuaDiagnostic] importUserApi: skipped-existing')
+    const userDeletedYehua = await getData<boolean>('@yehua_default_source_user_deleted')
+    const currentList = await getUserApiList()
+    const existingYehua = currentList.some(api => api.name === '野花🌷')
+    if (!existingYehua && !userDeletedYehua) {
+      const script = getYehuaSource()
+      if (typeof script !== 'string' || !script.trim().startsWith('/*')) {
+        throw new Error('野花腳本解壓或標頭驗證失敗')
       }
-      diagnosticStage = 'verify-list'
-      const verifiedList = await getUserApiList()
-      const verifiedYehua = verifiedList.find(api => api.name.includes('野花'))
-      console.info('[YehuaDiagnostic] verified list:', verifiedList.length, 'containsYehua:', Boolean(verifiedYehua), 'idSuffix:', verifiedYehua?.id.slice(-6) ?? 'none')
-      if (!verifiedYehua) throw new Error('Yehua missing after import')
-      diagnosticStage = 'verify-script'
-      const storedScript = await getUserApiScript(verifiedYehua.id)
-      console.info('[YehuaDiagnostic] stored script:', 'length=' + storedScript.length, 'headerValid=' + storedScript.trim().startsWith('/*'))
-      if (!storedScript.trim().startsWith('/*')) throw new Error('stored script missing or invalid')
-      diagnosticStage = 'save-marker'
-      await saveData(storageDataPrefix.yehuaDefaultSourceMigrationV5, true)
-      console.info('[YehuaDiagnostic] migration complete')
-    } else {
-      console.info('[YehuaDiagnostic] migration skipped: marker already true')
+      await importUserApi(script)
+      const importedList = await getUserApiList()
+      if (!importedList.some(api => api.name === '野花🌷')) {
+        throw new Error('野花匯入後未出現在自訂來源清單')
+      }
     }
+    setUserApiList(await getUserApiList())
   } catch (error) {
-    console.warn('[YehuaDiagnostic] failed at stage:', diagnosticStage, 'error:', error instanceof Error ? error.message : String(error))
-  }
-
-  diagnosticStage = 'publish-list'
-  try {
-    const finalList = await getUserApiList()
-    console.info('[YehuaDiagnostic] final list:', finalList.length, 'containsYehua:', finalList.some(api => api.name.includes('野花')))
-    setUserApiList(finalList)
-    console.info('[YehuaDiagnostic] published list')
-  } catch (error) {
-    console.warn('[YehuaDiagnostic] publish-list failed:', error instanceof Error ? error.message : String(error))
-    setUserApiList(diagnosticList)
+    console.warn('[Yehua] 自訂來源補入失敗：', error instanceof Error ? error.message : String(error))
+    // 匯入失敗不寫入完成標記，下次啟動可再次補入。
+    setUserApiList(await getUserApiList())
   }
 }
