@@ -18,6 +18,7 @@ export default () => {
   const t = useI18n()
   const theme = useTheme()
   const [type, setType] = useState<SearchType>('music')
+  const [focusedType, setFocusedType] = useState<SearchType | null>(null)
 
   useEffect(() => {
     void getSearchSetting().then(info => {
@@ -38,7 +39,15 @@ export default () => {
     <ScrollView style={styles.container} keyboardShouldPersistTaps={'always'} horizontal={true}>
       {
         list.map(t => (
-          <TouchableOpacity style={styles.button} onPress={() => { handleTypeChange(t.id) }} key={t.id}>
+          <TouchableOpacity
+            focusable
+            hasTVPreferredFocus={type == t.id}
+            style={[styles.button, (focusedType == t.id || type == t.id) && styles.tvActiveButton, focusedType == t.id && styles.tvFocusedButton]}
+            onFocus={() => { setFocusedType(t.id) }}
+            onBlur={() => { setFocusedType(null) }}
+            onPress={() => { handleTypeChange(t.id) }}
+            key={t.id}
+          >
             <Text style={{ ...styles.buttonText, borderBottomColor: type == t.id ? theme['c-primary-background-active'] : 'transparent' }} color={type == t.id ? theme['c-primary-font-active'] : theme['c-font']}>{t.label}</Text>
           </TouchableOpacity>
         ))
@@ -57,6 +66,10 @@ const styles = createStyle({
     // backgroundColor: 'rgba(0,0,0,0.1)',
   },
   button: {
+    minHeight: 46,
+    justifyContent: 'center',
+    borderRadius: 10,
+    paddingHorizontal: 12,
     // height: 38,
     // lineHeight: 38,
     justifyContent: 'center',
@@ -64,6 +77,13 @@ const styles = createStyle({
     paddingRight: 8,
     // width: 80,
     // backgroundColor: 'rgba(0,0,0,0.1)',
+  },
+  tvActiveButton: {
+    backgroundColor: 'rgba(40, 200, 245, 0.14)',
+  },
+  tvFocusedButton: {
+    borderWidth: 2,
+    borderColor: '#42CFF8',
   },
   buttonText: {
     // height: 38,
