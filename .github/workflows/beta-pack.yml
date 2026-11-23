@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - beta
+      - feature/tw-traditional-chinese
 
 jobs:
   Android:
@@ -41,3 +42,15 @@ jobs:
         uses: ./.github/actions/upload-artifact
         env:
           PACKAGE_VERSION: ${{ env.PACKAGE_VERSION }}
+
+      - name: Package complete source archive
+        shell: bash
+        run: |
+          PACKAGE_VERSION=$(node -p "require('./package.json').version")
+          git archive --format=zip --output="lx-music-mobile-v${PACKAGE_VERSION}-source.zip" HEAD
+
+      - name: Upload complete source archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: lx-music-mobile-source
+          path: lx-music-mobile-v*-source.zip
