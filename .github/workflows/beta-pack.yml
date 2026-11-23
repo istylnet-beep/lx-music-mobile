@@ -6,6 +6,7 @@ on:
     branches:
       - beta
       - feature/tw-traditional-chinese
+      - feature/tv-ui-black-iceblue
 
 jobs:
   Android:
