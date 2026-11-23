@@ -28,9 +28,6 @@ const createProfile = (): MusicParserProfile => ({
   params: {},
   headers: {},
   body: '',
-  sourceParam: 'source',
-  idParam: 'id',
-  qualityParam: 'quality',
 })
 
 const Field = ({ label, value, onChangeText, placeholder, multiline = false }: {
