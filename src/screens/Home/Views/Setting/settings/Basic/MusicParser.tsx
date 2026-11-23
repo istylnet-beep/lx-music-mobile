@@ -196,7 +196,7 @@ export default memo(() => {
                                   <Button onPress={() => { void remove(profile) }}>{t('delete')}</Button>
                                 </View>
                               </View>
-                            ))
+                          ))
                           : <Text style={styles.empty} color={theme['c-font-label']}>{t('music_parser_empty')}</Text>}
                       </ScrollView>
                     )}
