@@ -1,4 +1,4 @@
-name: Run build test
+name: Run TV redesign build test
 
 on:
   workflow_dispatch:
