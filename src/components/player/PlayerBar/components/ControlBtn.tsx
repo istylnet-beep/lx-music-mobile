@@ -34,8 +34,8 @@ const ControlButton = ({ icon, onPress, isPlayButton = false }: {
         focused && styles.focusedBtn,
       ]}
       activeOpacity={0.75}
-      onFocus={() => setFocused(true)}
-      onBlur={() => setFocused(false)}
+      onFocus={() => { setFocused(true) }}
+      onBlur={() => { setFocused(false) }}
       onPress={onPress}
     >
       <Icon name={icon} color={focused ? '#EAFBFF' : theme['c-button-font']} size={size} />
