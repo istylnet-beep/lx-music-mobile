@@ -425,7 +425,7 @@
   "sync__dislike_mode_other_tip_desc": "「取消同步」將不使用「不喜歡的歌曲」清單同步功能",
   "sync__dislike_mode_overwrite_tip_desc": "被覆蓋者的清單將被取代成覆蓋者的清單",
   "sync__dislike_mode_title": "選取與「{name}」的「不喜歡的歌曲」清單同步方式",
-  "sync__list_mode_merge_tip_desc": "將兩邊的清單合併到一起，相同的歌曲將被去掉（去掉的是被合併者的歌曲），不同的歌曲將被添加。",
+  "sync__list_mode_merge_tip_desc": "合併兩邊的清單。若有重複歌曲，會移除被合併方的歌曲；不同歌曲則會加入。",
   "sync__list_mode_other_tip_desc": "「取消同步」將不使用清單同步功能。",
   "sync__list_mode_overwrite_tip_desc": "被覆蓋者與覆蓋者清單 ID 相同的清單將被刪除後取代成覆蓋者的清單（清單 ID 不同的清單將被合併到一起）。若勾選「完全覆蓋」，則被覆蓋者的所有清單將被移除，然後取代成覆蓋者的清單。",
   "sync__list_mode_title": "選取與「{name}」的清單同步方式",
