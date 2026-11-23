@@ -120,7 +120,6 @@ export const buildActiveThemeColors = (theme: LX.Theme): LX.ActiveTheme => {
       'c-list-header-border-bottom': 'rgba(40, 200, 245, 0.38)',
       'c-font': '#F2F6FA',
       'c-font-label': '#AAB7C4',
-      'c-primary-font': '#42CFF8',
     }
   }
   return activeTheme
