@@ -4,8 +4,6 @@ import { getData, removeData, saveData } from '@/plugins/storage'
 import migrateSetting from './migrateSetting'
 import settingState from '@/store/setting/state'
 import { migrateMetaData, migrateListData } from './migrate'
-import { addUserApi, getUserApiList } from '@/utils/data'
-import defaultYehuaScript from '@/core/init/userApi/defaultSources/yehua'
 import { exitApp, tipDialog } from '@/utils/tools'
 
 // 业务相关工具方法
@@ -80,14 +78,12 @@ export const updateSetting = (setting?: Partial<LX.AppSetting> | null, isInit: b
 
 export const initSetting = async() => {
   let setting: Partial<LX.AppSetting> | null = await getData(storageDataPrefix.setting)
-  let isFirstInstall = setting == null
 
 
   // try migrate setting before v1
   if (!setting) {
     const config = await getData<{ setting?: any }>(storageDataPrefixOld.setting)
     if (config != null) {
-      isFirstInstall = false
       setting = migrateSetting(config)
       try {
         await migrateListData()
@@ -104,16 +100,6 @@ export const initSetting = async() => {
         throw err
       }
       await removeData(storageDataPrefixOld.setting)
-    }
-  }
-
-  // 僅在全新安裝時預先匯入；既有安裝升級不會新增，刪除後也不會重複補回。
-  if (isFirstInstall) {
-    try {
-      const userApiList = await getUserApiList()
-      if (!userApiList.some(api => api.name === '野花🌷')) await addUserApi(defaultYehuaScript)
-    } catch (error) {
-      console.warn('Failed to preload default user API source:', error)
     }
   }
 
