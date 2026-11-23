@@ -10,7 +10,7 @@ import { setNavActiveId } from '@/core/common'
 import { BorderWidths } from '@/theme'
 import { useSettingValue } from '@/store/setting/hook'
 
-const NAV_WIDTH = 56
+const NAV_WIDTH = 52
 
 const styles = createStyle({
   container: {
@@ -37,11 +37,18 @@ const styles = createStyle({
     paddingBottom: 15,
   },
   menuItem: {
+    minHeight: 62,
+    marginHorizontal: 5,
+    marginVertical: 3,
+    borderRadius: 10,
     flexDirection: 'row',
-    paddingTop: 15,
-    paddingBottom: 15,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  focusedMenuItem: {
+    backgroundColor: 'rgba(40, 200, 245, 0.16)',
+    borderWidth: 2,
+    borderColor: '#28C8F5',
   },
   iconContent: {
     alignItems: 'center',
