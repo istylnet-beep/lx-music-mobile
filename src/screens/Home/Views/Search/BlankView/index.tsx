@@ -3,6 +3,7 @@ import { useI18n } from '@/lang'
 import { useSettingValue } from '@/store/setting/hook'
 import { useTheme } from '@/store/theme/hook'
 import { createStyle } from '@/utils/tools'
+import { useHorizontalMode } from '@/utils/hooks'
 import { forwardRef, useImperativeHandle, useRef, useState } from 'react'
 import { ScrollView, View } from 'react-native'
 import HistorySearch, { type HistorySearchType } from './HistorySearch'
@@ -26,6 +27,7 @@ export default forwardRef<BlankViewType, BlankViewProps>(({ onSearch }, ref) => 
   const isShowHistorySearch = useSettingValue('search.isShowHistorySearch')
   const t = useI18n()
   const theme = useTheme()
+  const isTV = useHorizontalMode()
 
   const handleShow = (source: Source) => {
     hotSearchRef.current?.show(source)
@@ -57,7 +59,7 @@ export default forwardRef<BlankViewType, BlankViewProps>(({ onSearch }, ref) => 
           )
         : (
             <View style={styles.welcome}>
-              <Text size={22} color={theme['c-font-label']}>{t('search__welcome')}</Text>
+              <Text size={isTV ? 28 : 22} color={theme['c-font-label']}>{t('search__welcome')}</Text>
             </View>
           )
       : null
