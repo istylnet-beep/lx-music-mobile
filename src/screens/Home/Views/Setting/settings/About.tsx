@@ -72,7 +72,7 @@ export default memo(() => {
         </TouchableOpacity>
       </View>
       <View style={styles.part}>
-        <Text style={styles.text}><Text style={styles.boldText}>本應用程式沒有客服</Text>，，但我們整理了常見的使用問題。<Text style={styles.boldText} >務必仔細閱讀</Text>地阅读常见问题后，</Text>
+        <Text style={styles.text}><Text style={styles.boldText}>本應用程式沒有客服</Text>，但我們整理了一些常見問題。請先<Text style={styles.boldText}>仔細閱讀</Text>常見問題；</Text>
         <Text style={styles.text}>若仍有疑問，可至 GitHub </Text>
         <TouchableOpacity onPress={openIssuePage}>
           <Text style={textLinkStyle}>回報問題（Issue）</Text>
