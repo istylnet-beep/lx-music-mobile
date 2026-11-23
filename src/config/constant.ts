@@ -39,6 +39,7 @@ export enum NAV_SHEAR_NATIVE_IDS {
 
 export const storageDataPrefix = {
   setting: '@setting_v1',
+  firstInstallPending: '@first_install_pending',
   userList: '@user_list',
   viewPrevState: '@view_prev_state',
 
