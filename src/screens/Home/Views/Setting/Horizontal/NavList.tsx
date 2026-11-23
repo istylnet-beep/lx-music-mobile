@@ -4,6 +4,7 @@ import { View, TouchableOpacity, FlatList, type FlatListProps } from 'react-nati
 import { Icon } from '@/components/common/Icon'
 
 import { useTheme } from '@/store/theme/hook'
+import { useHorizontalMode } from '@/utils/hooks'
 import { createStyle } from '@/utils/tools'
 import Text from '@/components/common/Text'
 import { scaleSizeH } from '@/utils/pixelRatio'
@@ -20,6 +21,8 @@ const ListItem = memo(({ id, activeId, onPress }: {
   id: SettingScreenIds
 }) => {
   const theme = useTheme()
+  const isTV = useHorizontalMode()
+  const [focused, setFocused] = useState(false)
   const t = useI18n()
 
   const active = activeId == id
@@ -29,14 +32,21 @@ const ListItem = memo(({ id, activeId, onPress }: {
   }
 
   return (
-    <View style={{ ...styles.listItem, height: ITEM_HEIGHT }}>
+    <View style={[styles.listItem, { height: isTV ? 58 : ITEM_HEIGHT }, isTV && focused && styles.tvFocusedItem]}>
       {
         active
           ? <Icon style={styles.listActiveIcon} name="chevron-right" size={12} color={theme['c-primary-font']} />
           : null
       }
-      <TouchableOpacity style={styles.listName} onPress={handlePress}>
-        <Text numberOfLines={1} size={16} color={active ? theme['c-primary-font'] : theme['c-font']}>{t(`setting_${id}`)}</Text>
+      <TouchableOpacity
+        focusable
+        activeOpacity={0.85}
+        style={styles.listName}
+        onFocus={() => { setFocused(true) }}
+        onBlur={() => { setFocused(false) }}
+        onPress={handlePress}
+      >
+        <Text numberOfLines={1} size={isTV ? 19 : 16} color={active ? theme['c-primary-font'] : theme['c-font']}>{t(`setting_${id}`)}</Text>
       </TouchableOpacity>
     </View>
   )
@@ -108,6 +118,13 @@ const styles = createStyle({
     paddingRight: 10,
     paddingLeft: 10,
     // borderBottomWidth: BorderWidths.normal,
+  },
+  tvFocusedItem: {
+    marginHorizontal: 6,
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: '#42CFF8',
+    backgroundColor: 'rgba(66, 207, 248, 0.14)',
   },
   listActiveIcon: {
     // width: 18,
