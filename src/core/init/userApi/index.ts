@@ -3,7 +3,7 @@ import { importUserApi, log, setUserApiList, setUserApiStatus } from '@/core/use
 import settingState from '@/store/setting/state'
 import BackgroundTimer from 'react-native-background-timer'
 import { fetchData } from './request'
-import { getUserApiList } from '@/utils/data'
+import { getUserApiList, getUserApiScript } from '@/utils/data'
 import { getData, saveData } from '@/plugins/storage'
 import { storageDataPrefix } from '@/config/constant'
 import { confirmDialog, openUrl, tipDialog } from '@/utils/tools'
@@ -258,28 +258,56 @@ export default async(setting: LX.AppSetting) => {
   // 野花🌷沿用應用程式原生自訂音源匯入流程，僅加入管理清單，不自動啟用。
   // V5 使用全新標記，避免舊版 V4 已誤標完成而讓舊安裝跳過匯入。
   // 完成後若使用者自行刪除，不會在每次啟動時重新加入。
+  let diagnosticList: LX.UserApi.UserApiInfo[] = []
+  let diagnosticStage = 'start'
   try {
     const migrationCompleted = await getData<boolean>(storageDataPrefix.yehuaDefaultSourceMigrationV5)
+    console.info('[YehuaDiagnostic] marker:', migrationCompleted === true ? 'true' : migrationCompleted === false ? 'false' : 'undefined')
     if (!migrationCompleted) {
-      const userApiList = await getUserApiList()
-      const existingYehuaApi = userApiList.find(api => api.name.includes('野花'))
+      diagnosticStage = 'read-list'
+      diagnosticList = await getUserApiList()
+      console.info('[YehuaDiagnostic] initial list:', diagnosticList.length, 'containsYehua:', diagnosticList.some(api => api.name.includes('野花')))
+      const existingYehuaApi = diagnosticList.find(api => api.name.includes('野花'))
       if (!existingYehuaApi) {
+        diagnosticStage = 'decompress'
         const script = getYehuaSource()
+        console.info('[YehuaDiagnostic] script:', 'type=' + typeof script, 'length=' + (typeof script === 'string' ? script.length : -1), 'headerValid=' + (typeof script === 'string' && script.trim().startsWith('/*')))
         if (typeof script !== 'string' || !script.trim().startsWith('/*')) {
-          throw new Error('預設野花音源腳本解壓縮結果無效')
+          throw new Error('decompressed script invalid')
         }
+        diagnosticStage = 'import'
         await importUserApi(script)
+        console.info('[YehuaDiagnostic] importUserApi: success')
+      } else {
+        console.info('[YehuaDiagnostic] importUserApi: skipped-existing')
       }
+      diagnosticStage = 'verify-list'
       const verifiedList = await getUserApiList()
-      if (!verifiedList.some(api => api.name.includes('野花'))) {
-        throw new Error('野花音源未成功寫入自訂來源清單')
-      }
+      const verifiedYehua = verifiedList.find(api => api.name.includes('野花'))
+      console.info('[YehuaDiagnostic] verified list:', verifiedList.length, 'containsYehua:', Boolean(verifiedYehua), 'idSuffix:', verifiedYehua?.id.slice(-6) ?? 'none')
+      if (!verifiedYehua) throw new Error('Yehua missing after import')
+      diagnosticStage = 'verify-script'
+      const storedScript = await getUserApiScript(verifiedYehua.id)
+      console.info('[YehuaDiagnostic] stored script:', 'length=' + storedScript.length, 'headerValid=' + storedScript.trim().startsWith('/*'))
+      if (!storedScript.trim().startsWith('/*')) throw new Error('stored script missing or invalid')
+      diagnosticStage = 'save-marker'
       await saveData(storageDataPrefix.yehuaDefaultSourceMigrationV5, true)
-      console.info('Default user API source migration V5 completed: 野花🌷')
+      console.info('[YehuaDiagnostic] migration complete')
+    } else {
+      console.info('[YehuaDiagnostic] migration skipped: marker already true')
     }
   } catch (error) {
-    console.warn('Failed to migrate default user API source V5; will retry on next launch:', error)
+    console.warn('[YehuaDiagnostic] failed at stage:', diagnosticStage, 'error:', error instanceof Error ? error.message : String(error))
   }
 
-  setUserApiList(await getUserApiList())
+  diagnosticStage = 'publish-list'
+  try {
+    const finalList = await getUserApiList()
+    console.info('[YehuaDiagnostic] final list:', finalList.length, 'containsYehua:', finalList.some(api => api.name.includes('野花')))
+    setUserApiList(finalList)
+    console.info('[YehuaDiagnostic] published list')
+  } catch (error) {
+    console.warn('[YehuaDiagnostic] publish-list failed:', error instanceof Error ? error.message : String(error))
+    setUserApiList(diagnosticList)
+  }
 }
