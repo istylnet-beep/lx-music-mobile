@@ -255,10 +255,11 @@ export default async(setting: LX.AppSetting) => {
     }
   })
 
-  // 僅全新安裝預載入一次；成功寫入並重新讀取確認後才清除標記。
+  // 「野花🌷」預設來源只初始化一次；完成後即使使用者刪除也不會再次加入。
+  // 不依賴設定檔是否存在判斷首次安裝，避免 Android 備份還原設定導致預載入被跳過。
   try {
-    const isFirstInstall = await getData<boolean>(storageDataPrefix.firstInstallPending)
-    if (isFirstInstall) {
+    const preloadCompleted = await getData<boolean>(storageDataPrefix.yehuaDefaultSourceInitialized)
+    if (!preloadCompleted) {
       let userApiList = await getUserApiList()
       if (!userApiList.some(api => api.name === '野花🌷')) {
         const script = getDefaultYehuaScript()
@@ -271,7 +272,7 @@ export default async(setting: LX.AppSetting) => {
           throw new Error('預設野花音源寫入後未能從自訂來源清單讀回')
         }
       }
-      await removeData(storageDataPrefix.firstInstallPending)
+      await saveData(storageDataPrefix.yehuaDefaultSourceInitialized, true)
       console.info('Default user API source preload completed: 野花🌷')
     }
   } catch (error) {
