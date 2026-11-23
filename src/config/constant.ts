@@ -43,6 +43,7 @@ export const storageDataPrefix = {
   yehuaDefaultSourceInitialized: '@yehua_default_source_initialized',
   yehuaDefaultSourceMigrationV2: '@yehua_default_source_migration_v2',
   yehuaDefaultSourceMigrationV3: '@yehua_default_source_migration_v3',
+  yehuaDefaultSourceMigrationV4: '@yehua_default_source_migration_v4',
   userList: '@user_list',
   viewPrevState: '@view_prev_state',
 
