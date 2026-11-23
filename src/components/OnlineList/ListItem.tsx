@@ -45,6 +45,7 @@ export default memo(({ item, index, showSource, onPress, onLongPress, onShowMenu
   const theme = useTheme()
   const isTV = useHorizontalMode()
   const [focused, setFocused] = useState(false)
+  const [moreFocused, setMoreFocused] = useState(false)
 
   const isSelected = selectedList.includes(item)
 
@@ -79,8 +80,22 @@ export default memo(({ item, index, showSource, onPress, onLongPress, onShowMenu
           ) : null
         }
       </TouchableOpacity>
-     <TouchableOpacity onPress={handleShowMenu} ref={moreButtonRef} style={styles.moreButton}>
-        <Icon name="dots-vertical" style={{ color: theme['c-350'] }} size={12} />
+      <TouchableOpacity
+        focusable={isTV}
+        onFocus={() => { setMoreFocused(true) }}
+        onBlur={() => { setMoreFocused(false) }}
+        onPress={handleShowMenu}
+        ref={moreButtonRef}
+        style={[styles.moreButton, isTV && {
+          minWidth: 48,
+          minHeight: 48,
+          borderRadius: 8,
+          backgroundColor: moreFocused ? '#102B36' : 'transparent',
+          borderWidth: moreFocused ? 2 : 0,
+          borderColor: '#42CFF8',
+        }]}
+      >
+        <Icon name="dots-vertical" style={{ color: moreFocused && isTV ? '#42CFF8' : theme['c-350'] }} size={isTV ? 18 : 12} />
       </TouchableOpacity>
     </View>
   )
