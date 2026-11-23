@@ -255,28 +255,24 @@ export default async(setting: LX.AppSetting) => {
     }
   })
 
-  // 「野花🌷」預設來源只初始化一次；完成後即使使用者刪除也不會再次加入。
-  // 不依賴設定檔是否存在判斷首次安裝，避免 Android 備份還原設定導致預載入被跳過。
+  // 野花🌷僅自動加入管理清單，不自動啟用或切換目前音源。
+  // V2 遷移只執行一次，讓既有安裝也能補入；完成後使用者自行刪除不會被重新加入。
   try {
-    const preloadCompleted = await getData<boolean>(storageDataPrefix.yehuaDefaultSourceInitialized)
-    if (!preloadCompleted) {
-      let userApiList = await getUserApiList()
+    const migrationCompleted = await getData<boolean>(storageDataPrefix.yehuaDefaultSourceMigrationV2)
+    if (!migrationCompleted) {
+      const userApiList = await getUserApiList()
       if (!userApiList.some(api => api.name === '野花🌷')) {
         const script = getDefaultYehuaScript()
         if (typeof script !== 'string' || !script.trim().startsWith('/*')) {
           throw new Error('預設野花音源腳本解壓縮結果無效')
         }
-        const addedApi = await addUserApi(script)
-        userApiList = await getUserApiList()
-        if (!userApiList.some(api => api.id === addedApi.id && api.name === '野花🌷')) {
-          throw new Error('預設野花音源寫入後未能從自訂來源清單讀回')
-        }
+        await addUserApi(script)
       }
-      await saveData(storageDataPrefix.yehuaDefaultSourceInitialized, true)
-      console.info('Default user API source preload completed: 野花🌷')
+      await saveData(storageDataPrefix.yehuaDefaultSourceMigrationV2, true)
+      console.info('Default user API source migration completed: 野花🌷')
     }
   } catch (error) {
-    console.warn('Failed to preload default user API source; will retry on next launch:', error)
+    console.warn('Failed to migrate default user API source; will retry on next launch:', error)
   }
 
   setUserApiList(await getUserApiList())
