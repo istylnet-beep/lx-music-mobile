@@ -256,12 +256,12 @@ export default async(setting: LX.AppSetting) => {
   })
 
   // 野花🌷僅自動加入管理清單，不自動啟用或切換目前音源。
-  // V2 遷移只執行一次，讓既有安裝也能補入；完成後使用者自行刪除不會被重新加入。
+  // V3 使用獨立旗標，確保曾執行過失敗的舊版 V2 遷移也能重新補入一次。
+  // V3 完成後若使用者自行刪除，不會在每次啟動時重新加入。
   try {
-    const migrationCompleted = await getData<boolean>(storageDataPrefix.yehuaDefaultSourceMigrationV2)
+    const migrationCompleted = await getData<boolean>(storageDataPrefix.yehuaDefaultSourceMigrationV3)
     if (!migrationCompleted) {
       let userApiList = await getUserApiList()
-      // 以名稱關鍵字識別舊資料，避免重複建立；管理清單顯示名稱統一為「野花🌷」。
       const existingYehuaApi = userApiList.find(api => api.name.includes('野花'))
       const yehuaApi = existingYehuaApi ?? await (async() => {
         const script = getDefaultYehuaScript()
@@ -271,20 +271,18 @@ export default async(setting: LX.AppSetting) => {
         return addUserApi(script)
       })()
       if (yehuaApi.name !== '野花🌷') {
-        yehuaApi.name = '野花🌷'
         userApiList = userApiList.map(api => api.id === yehuaApi.id ? { ...api, name: '野花🌷' } : api)
         await saveData(storageDataPrefix.userApi, userApiList)
       }
-      // 寫入後重新讀取確認資料確實存在，確認成功才完成遷移。
       userApiList = await getUserApiList()
       if (!userApiList.some(api => api.id === yehuaApi.id && api.name === '野花🌷')) {
         throw new Error('野花音源未成功寫入自訂來源清單')
       }
-      await saveData(storageDataPrefix.yehuaDefaultSourceMigrationV2, true)
-      console.info('Default user API source migration completed: 野花🌷')
+      await saveData(storageDataPrefix.yehuaDefaultSourceMigrationV3, true)
+      console.info('Default user API source migration V3 completed: 野花🌷')
     }
   } catch (error) {
-    console.warn('Failed to migrate default user API source; will retry on next launch:', error)
+    console.warn('Failed to migrate default user API source V3; will retry on next launch:', error)
   }
 
   setUserApiList(await getUserApiList())
