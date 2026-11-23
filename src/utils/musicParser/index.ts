@@ -29,7 +29,7 @@ const sourceMap: Record<string, string> = {
   xm: 'ximalaya',
 }
 
-const getProfiles = async(): Promise<MusicParserProfile[]> => {
+export const getMusicParserProfiles = async(): Promise<MusicParserProfile[]> => {
   const profiles = await getData<MusicParserProfile[]>(STORAGE_KEY)
   return Array.isArray(profiles) ? profiles : []
 }
@@ -156,7 +156,7 @@ const requestProfile = async(profile: MusicParserProfile, musicInfo: LX.Music.Mu
  * the primary provider; this resolver is called only after native URL lookup fails.
  */
 export const getParsedMusicUrl = async(musicInfo: LX.Music.MusicInfoOnline, quality: LX.Quality) => {
-  const profiles = (await getProfiles()).filter(profile => profile.enabled && profile.url.trim())
+  const profiles = (await getMusicParserProfiles()).filter(profile => profile.enabled && profile.url.trim())
   if (!profiles.length) throw new Error('尚未設定啟用中的音樂解析 API')
 
   const errors: string[] = []
@@ -168,4 +168,15 @@ export const getParsedMusicUrl = async(musicInfo: LX.Music.MusicInfoOnline, qual
     }
   }
   throw new Error(errors.join('；') || '所有音樂解析 API 均無法使用')
+}
+
+export const testMusicParserProfile = async(profile: MusicParserProfile) => {
+  const sampleMusic = {
+    source: 'wy',
+    id: 'parser-test-song-id',
+    name: '測試歌曲',
+    singer: '測試歌手',
+    meta: { albumName: '測試專輯' },
+  } as LX.Music.MusicInfoOnline
+  return requestProfile(profile, sampleMusic, '128k')
 }
