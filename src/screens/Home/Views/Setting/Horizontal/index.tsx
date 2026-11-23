@@ -5,6 +5,7 @@ import Main, { type MainType } from '../Main'
 import { createStyle } from '@/utils/tools'
 import { BorderWidths } from '@/theme'
 import { useTheme } from '@/store/theme/hook'
+import { useHorizontalMode } from '@/utils/hooks'
 
 const styles = createStyle({
   container: {
@@ -14,7 +15,7 @@ const styles = createStyle({
   },
   nav: {
     height: '100%',
-    width: '22%',
+    width: '20%',
     borderRightWidth: BorderWidths.normal,
   },
   main: {
@@ -28,15 +29,16 @@ const styles = createStyle({
 
 export default () => {
   const theme = useTheme()
+  const isTV = useHorizontalMode()
   const mainRef = useRef<MainType>(null)
 
   return (
     <View style={{ ...styles.container, borderTopColor: theme['c-border-background'] }}>
-      <View style={{ ...styles.nav, borderRightColor: theme['c-border-background'] }}>
+      <View style={{ ...styles.nav, width: isTV ? '20%' : '22%', borderRightColor: theme['c-border-background'] }}>
         <NavList onChangeId={(id) => mainRef.current?.setActiveId(id)} />
       </View>
       <ScrollView keyboardShouldPersistTaps={'always'}>
-        <View style={styles.main}>
+        <View style={[styles.main, isTV && { paddingHorizontal: 28, paddingVertical: 24 }]}>
           <Main ref={mainRef} />
         </View>
       </ScrollView>
