@@ -47,7 +47,7 @@ const PlayPrevBtn = () => <ControlButton icon="prevMusic" onPress={handlePlayPre
 const PlayNextBtn = () => <ControlButton icon="nextMusic" onPress={handlePlayNext} />
 const TogglePlayBtn = () => {
   const isPlay = useIsPlay()
-  return <ControlButton icon={isPlay ? 'pause' : 'play'} onPress={togglePlay} isPlayButton />
+  return <ControlButton icon={isPlay ? 'pause' : 'play'} onPress={() => { togglePlay() }} isPlayButton />
 }
 
 export default () => {
