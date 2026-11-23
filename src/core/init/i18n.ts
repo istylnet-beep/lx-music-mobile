@@ -1,5 +1,4 @@
 import { createI18n } from '@/lang/i18n'
-import type { I18n } from '@/lang/i18n'
 import { setLanguage, updateSetting } from '@/core/common'
 
 
