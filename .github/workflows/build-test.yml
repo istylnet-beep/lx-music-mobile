@@ -1,4 +1,4 @@
-name: Run TV redesign build test
+name: Run TV redesign build test - lint fix
 
 on:
   workflow_dispatch:
