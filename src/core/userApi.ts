@@ -2,7 +2,6 @@ import { action, state } from '@/store/userApi'
 import { addUserApi, getUserApiScript, removeUserApi as removeUserApiFromStore, setUserApiAllowShowUpdateAlert as setUserApiAllowShowUpdateAlertFromStore } from '@/utils/data'
 import { destroy, loadScript } from '@/utils/nativeModules/userApi'
 import { log as writeLog } from '@/utils/log'
-import { saveData } from '@/plugins/storage'
 
 
 export const setUserApi = async(apiId: string) => {
@@ -34,10 +33,6 @@ export const importUserApi = async(script: string) => {
 }
 
 export const removeUserApi = async(ids: string[]) => {
-  // 使用者明確刪除野花時留下 tombstone，避免啟動補入流程再次加入。
-  if (ids.some(id => state.list.some(api => api.id === id && api.name === '野花🌷'))) {
-    await saveData('@yehua_default_source_user_deleted', true)
-  }
   const list = await removeUserApiFromStore(ids)
   action.setUserApiList(list)
 }
