@@ -274,11 +274,11 @@ export default async(setting: LX.AppSetting) => {
       if (!verifiedList.some(api => api.name.includes('野花'))) {
         throw new Error('野花音源未成功寫入自訂來源清單')
       }
-      await saveData(storageDataPrefix.yehuaDefaultSourceMigrationV4, true)
+      await saveData(storageDataPrefix.yehuaDefaultSourceMigrationV5, true)
       console.info('Default user API source migration V5 completed: 野花🌷')
     }
   } catch (error) {
-    console.warn('Failed to migrate default user API source V4; will retry on next launch:', error)
+    console.warn('Failed to migrate default user API source V5; will retry on next launch:', error)
   }
 
   setUserApiList(await getUserApiList())
