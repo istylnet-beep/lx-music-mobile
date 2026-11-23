@@ -63,7 +63,7 @@ export default memo(({ item, index, showSource, onPress, onLongPress, onShowMenu
 
   return (
     <View style={{ ...styles.listItem, width: rowInfo.rowWidth, height: isTV ? scaleSizeH(64) : ITEM_HEIGHT, backgroundColor: focused && isTV ? '#102B36' : isSelected ? theme['c-primary-background-hover'] : 'rgba(0,0,0,0)', borderWidth: focused && isTV ? 2 : 0, borderColor: '#42CFF8', borderRadius: 9 }}>
-      <TouchableOpacity focusable={isTV} style={styles.listItemLeft} onFocus={() => setFocused(true)} onBlur={() => setFocused(false)} onPress={() => { onPress(item, index) }} onLongPress={() => { onLongPress(item, index) }}>
+      <TouchableOpacity focusable={isTV} style={styles.listItemLeft} onFocus={() => { setFocused(true) }} onBlur={() => { setFocused(false) }} onPress={() => { onPress(item, index) }} onLongPress={() => { onLongPress(item, index) }}>
         <Text style={styles.sn} size={13} color={theme['c-300']}>{index + 1}</Text>
         <View style={styles.itemInfo}>
           <Text size={isTV ? 18 : undefined} color={focused && isTV ? '#EAFBFF' : undefined} numberOfLines={1}>{item.name}</Text>
