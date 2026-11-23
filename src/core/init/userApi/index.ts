@@ -7,7 +7,7 @@ import { getUserApiList } from '@/utils/data'
 import { getData, saveData } from '@/plugins/storage'
 import { storageDataPrefix } from '@/config/constant'
 import { confirmDialog, openUrl, tipDialog } from '@/utils/tools'
-import getYehuaSource from './defaultSources/yehua'
+import getYehuaSource from '../../userApi/defaultSources/yehua'
 
 
 export default async(setting: LX.AppSetting) => {
