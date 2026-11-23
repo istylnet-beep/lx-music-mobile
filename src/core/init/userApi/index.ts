@@ -4,6 +4,8 @@ import settingState from '@/store/setting/state'
 import BackgroundTimer from 'react-native-background-timer'
 import { fetchData } from './request'
 import { addUserApi, getUserApiList } from '@/utils/data'
+import { getData, removeData } from '@/plugins/storage'
+import { storageDataPrefix } from '@/config/constant'
 import defaultYehuaScript from './defaultSources/yehua'
 import { confirmDialog, openUrl, tipDialog } from '@/utils/tools'
 
@@ -253,11 +255,14 @@ export default async(setting: LX.AppSetting) => {
     }
   })
 
-  // 全新安裝時預載入預設音源；設定初始化完成後才操作音源儲存，避免干擾核心設定流程。
+  // 僅全新安裝預載入一次；舊版升級及使用者刪除後都不會重新加入。
   try {
-    const userApiList = await getUserApiList()
-    const isFirstInstall = userApiList.length === 0
-    if (isFirstInstall) await addUserApi(defaultYehuaScript)
+    const isFirstInstall = await getData<boolean>(storageDataPrefix.firstInstallPending)
+    if (isFirstInstall) {
+      const userApiList = await getUserApiList()
+      if (!userApiList.some(api => api.name === '野花🌷')) await addUserApi(defaultYehuaScript)
+      await removeData(storageDataPrefix.firstInstallPending)
+    }
   } catch (error) {
     console.warn('Failed to preload default user API source:', error)
   }
