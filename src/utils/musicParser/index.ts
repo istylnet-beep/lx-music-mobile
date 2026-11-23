@@ -14,9 +14,6 @@ export interface MusicParserProfile {
   params: Record<string, string>
   headers: Record<string, string>
   body: string
-  sourceParam: string
-  idParam: string
-  qualityParam: string
 }
 
 const STORAGE_KEY = '@music_parser_profiles'
@@ -114,15 +111,14 @@ const requestProfile = async(profile: MusicParserProfile, musicInfo: LX.Music.Mu
     for (const key of Object.keys(params)) params[key] = fillTemplate(params[key], musicInfo, quality)
   }
 
+  const query = Object.entries(params).map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`).join('&')
+  if (query) url += `${url.includes('?') ? '&' : '?'}${query}`
   if (profile.method === 'POST') {
     const rawBody = profile.body || JSON.stringify({
       source: '{source}', id: '{id}', name: '{name}', artist: '{artist}', quality: '{quality}',
     })
     body = rawBody.replace(/\\{(source|id|name|artist|album|quality)\\}/g, (_, key: keyof typeof values) => String(values[key]))
     if (!headers['Content-Type'] && !headers['content-type']) headers['Content-Type'] = 'application/json'
-  } else {
-    const query = Object.entries(params).map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`).join('&')
-    if (query) url += `${url.includes('?') ? '&' : '?'}${query}`
   }
 
   const controller = typeof AbortController !== 'undefined' ? new AbortController() : null
