@@ -5,6 +5,7 @@ import BackgroundTimer from 'react-native-background-timer'
 import { fetchData } from './request'
 import { getUserApiList } from '@/utils/data'
 import { getData, saveData } from '@/plugins/storage'
+import { storageDataPrefix } from '@/config/constant'
 import { confirmDialog, openUrl, tipDialog } from '@/utils/tools'
 
 
@@ -257,7 +258,7 @@ export default async(setting: LX.AppSetting) => {
   // V4 讓先前已執行 V2/V3 但實機清單仍未出現的舊安裝能重新匯入一次。
   // 完成後若使用者自行刪除，不會在每次啟動時重新加入。
   try {
-    const migrationCompleted = await getData<boolean>('@yehua_default_source_migration_v4')
+    const migrationCompleted = await getData<boolean>(storageDataPrefix.yehuaDefaultSourceMigrationV4)
     if (!migrationCompleted) {
       const userApiList = await getUserApiList()
       const existingYehuaApi = userApiList.find(api => api.name.includes('野花'))
@@ -272,7 +273,7 @@ export default async(setting: LX.AppSetting) => {
       if (!verifiedList.some(api => api.name.includes('野花'))) {
         throw new Error('野花音源未成功寫入自訂來源清單')
       }
-      await saveData('@yehua_default_source_migration_v4', true)
+      await saveData(storageDataPrefix.yehuaDefaultSourceMigrationV4, true)
       console.info('Default user API source migration V4 completed: 野花🌷')
     }
   } catch (error) {
