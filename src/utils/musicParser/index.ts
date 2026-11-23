@@ -57,8 +57,12 @@ const fillTemplate = (value: string, musicInfo: LX.Music.MusicInfoOnline, qualit
 const fillUrlTemplate = (value: string, musicInfo: LX.Music.MusicInfoOnline, quality: LX.Quality) => {
   return value.replace(/\\{(source|id|name|artist|album|quality)\\}/g, (_, key: string) => {
     const values: Record<string, string> = {
-      source: musicInfo.source, id: String(musicInfo.id), name: musicInfo.name,
-      artist: musicInfo.singer, album: musicInfo.meta.albumName ?? '', quality,
+      source: musicInfo.source,
+      id: String(musicInfo.id),
+      name: musicInfo.name,
+      artist: musicInfo.singer,
+      album: musicInfo.meta.albumName ?? '',
+      quality,
     }
     return encodeURIComponent(values[key] ?? '')
   })
@@ -177,12 +181,12 @@ export const getParsedMusicUrl = async(musicInfo: LX.Music.MusicInfoOnline, qual
 }
 
 export const testMusicParserProfile = async(profile: MusicParserProfile) => {
-  const sampleMusic = {
+  const sampleMusic: LX.Music.MusicInfoOnline = {
     source: 'wy',
     id: 'parser-test-song-id',
     name: '測試歌曲',
     singer: '測試歌手',
     meta: { albumName: '測試專輯' },
-  } as LX.Music.MusicInfoOnline
+  }
   return requestProfile(profile, sampleMusic, '128k')
 }
