@@ -12,7 +12,7 @@ import { buildActiveThemeColors } from '@/theme/themes'
 // TV mode uses one fixed black/ice-blue palette regardless of the mobile theme preference.
 const blackTheme = Themes.find(theme => theme.id === 'black')
 if (!blackTheme) throw new Error('TV theme "black" is missing')
-const TV_THEME = buildActiveThemeColors(blackTheme)
+const TV_THEME = buildActiveThemeColors(blackTheme as LX.Theme)
 
 const styles = createStyle({
   container: {
