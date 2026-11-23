@@ -260,13 +260,24 @@ export default async(setting: LX.AppSetting) => {
   try {
     const migrationCompleted = await getData<boolean>(storageDataPrefix.yehuaDefaultSourceMigrationV2)
     if (!migrationCompleted) {
-      const userApiList = await getUserApiList()
-      if (!userApiList.some(api => api.name === '野花🌷')) {
+      let userApiList = await getUserApiList()
+      // 以名稱關鍵字識別舊資料，避免重複建立；管理清單顯示名稱統一為「野花🌷」。
+      let yehuaApi = userApiList.find(api => api.name.includes('野花'))
+      if (!yehuaApi) {
         const script = getDefaultYehuaScript()
         if (typeof script !== 'string' || !script.trim().startsWith('/*')) {
           throw new Error('預設野花音源腳本解壓縮結果無效')
         }
-        await addUserApi(script)
+        yehuaApi = await addUserApi(script)
+      }
+      if (yehuaApi.name !== '野花🌷') {
+        yehuaApi.name = '野花🌷'
+        await saveData(storageDataPrefix.userApi, userApiList)
+      }
+      // 寫入後重新讀取確認資料確實存在，確認成功才完成遷移。
+      userApiList = await getUserApiList()
+      if (!userApiList.some(api => api.id === yehuaApi?.id && api.name === '野花🌷')) {
+        throw new Error('野花音源未成功寫入自訂來源清單')
       }
       await saveData(storageDataPrefix.yehuaDefaultSourceMigrationV2, true)
       console.info('Default user API source migration completed: 野花🌷')
