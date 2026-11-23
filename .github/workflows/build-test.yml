@@ -1,6 +1,7 @@
 name: Run build test
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - feature/tw-traditional-chinese
