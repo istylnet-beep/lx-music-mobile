@@ -1,4 +1,6 @@
 import { useCallback, useRef, forwardRef, useImperativeHandle, useState } from 'react'
+import { useTheme } from '@/store/theme/hook'
+import { useHorizontalMode } from '@/utils/hooks'
 // import { StyleSheet } from 'react-native'
 import Input, { type InputType, type InputProps } from '@/components/common/Input'
 
@@ -17,7 +19,9 @@ export interface SearchInputType {
 }
 
 export default forwardRef<SearchInputType, SearchInputProps>(({ onChangeText, onSubmit, onBlur, onTouchStart }, ref) => {
-  // const theme = useTheme()
+  const theme = useTheme()
+  const isTV = useHorizontalMode()
+  const [focused, setFocused] = useState(false)
   const [text, setText] = useState('')
   const inputRef = useRef<InputType>(null)
 
@@ -54,7 +58,7 @@ export default forwardRef<SearchInputType, SearchInputProps>(({ onChangeText, on
   return (
     <Input
       ref={inputRef}
-      placeholder="Search for something..."
+      placeholder="搜尋歌曲、歌手或專輯..."
       value={text}
       onChangeText={handleChangeText}
       // style={{ ...styles.input, backgroundColor: theme['c-primary-input-background'] }}
@@ -63,6 +67,17 @@ export default forwardRef<SearchInputType, SearchInputProps>(({ onChangeText, on
       onClearText={handleClearText}
       onTouchStart={onTouchStart}
       clearBtn
+      size={isTV ? 18 : 14}
+      onFocus={() => { setFocused(true) }}
+      onBlur={() => { setFocused(false); onBlur() }}
+      style={isTV ? {
+        height: 48,
+        paddingHorizontal: 16,
+        borderRadius: 12,
+        backgroundColor: '#0B1722',
+        borderWidth: 2,
+        borderColor: focused ? '#42CFF8' : '#263B4B',
+      } : undefined}
     />
   )
 })
