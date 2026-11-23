@@ -15,19 +15,20 @@ const styles = StyleSheet.create({
   image: {
     width: PIC_HEIGHT,
     height: PIC_HEIGHT,
-    borderRadius: 2,
+    borderRadius: 4,
+  },
+  tvImage: {
+    width: 148,
+    height: 148,
+    borderRadius: 10,
   },
 })
 
 export default ({ isHome }: { isHome: boolean }) => {
   const musicInfo = usePlayerMusicInfo()
   const handlePress = () => {
-    // console.log('')
-    // console.log(playMusicInfo)
     if (!musicInfo.id) return
     navigations.pushPlayDetailScreen(commonState.componentIds.home!)
-
-    // toast(global.i18n.t('play_detail_todo_tip'), 'long')
   }
 
   const handleLongPress = () => {
@@ -46,14 +47,7 @@ export default ({ isHome }: { isHome: boolean }) => {
 
   return (
     <TouchableOpacity onLongPress={handleLongPress} onPress={handlePress} activeOpacity={0.7} >
-      <Image url={musicInfo.pic} nativeID={NAV_SHEAR_NATIVE_IDS.playDetail_pic} style={styles.image} onError={handleError} />
+      <Image url={musicInfo.pic} nativeID={NAV_SHEAR_NATIVE_IDS.playDetail_pic} style={[styles.image, isHome && styles.tvImage]} onError={handleError} />
     </TouchableOpacity>
   )
-}
-
-
-// const styles = StyleSheet.create({
-//   playInfoImg: {
-
-//   },
-// })
+})
