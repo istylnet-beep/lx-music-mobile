@@ -192,7 +192,7 @@ export default memo(() => {
                                 <View style={styles.profileActions}>
                                   <Button onPress={() => { void move(profile, -1) }}>↑</Button>
                                   <Button onPress={() => { void move(profile, 1) }}>↓</Button>
-                                  <Button onPress={() => edit(profile)}>{t('music_parser_edit')}</Button>
+                                  <Button onPress={() => { edit(profile) }}>{t('music_parser_edit')}</Button>
                                   <Button onPress={() => { void remove(profile) }}>{t('delete')}</Button>
                                 </View>
                               </View>
