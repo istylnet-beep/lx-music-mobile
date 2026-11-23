@@ -13,6 +13,7 @@ import Text from '@/components/common/Text'
 import { type Position } from './ListMenu'
 import { scaleSizeH } from '@/utils/pixelRatio'
 import Loading from '@/components/common/Loading'
+import useHorizontalMode from '@/utils/hooks/useHorizontalMode'
 
 type FlatListType = FlatListProps<LX.List.MyListInfo>
 
@@ -26,6 +27,8 @@ const ListItem = memo(({ item, index, activeId, onPress, onShowMenu }: {
   onShowMenu: (item: LX.List.MyListInfo, index: number, position: { x: number, y: number, w: number, h: number }) => void
 }) => {
   const theme = useTheme()
+  const isTV = useHorizontalMode()
+  const [focused, setFocused] = useState(false)
   const moreButtonRef = useRef<TouchableOpacity>(null)
   const fetching = useListFetching(item.id)
 
@@ -45,15 +48,15 @@ const ListItem = memo(({ item, index, activeId, onPress, onShowMenu }: {
   }
 
   return (
-    <View style={{ ...styles.listItem, height: ITEM_HEIGHT }}>
+    <View style={{ ...styles.listItem, height: isTV ? scaleSizeH(58) : ITEM_HEIGHT, backgroundColor: focused ? '#102B36' : 'transparent', borderWidth: focused && isTV ? 2 : 0, borderColor: '#42CFF8', borderRadius: 9 }}>
       {
         active
           ? <Icon style={styles.listActiveIcon} name="chevron-right" size={12} color={theme['c-primary-font']} />
           : null
       }
       { fetching ? <Loading color={active ? theme['c-primary-font'] : theme['c-font']} style={styles.loading} /> : null }
-      <TouchableOpacity style={styles.listName} onPress={handlePress}>
-        <Text numberOfLines={1} color={active ? theme['c-primary-font'] : theme['c-font']}>{item.name}</Text>
+      <TouchableOpacity focusable={isTV} style={styles.listName} onFocus={() => setFocused(true)} onBlur={() => setFocused(false)} onPress={handlePress}>
+        <Text numberOfLines={1} size={isTV ? 17 : undefined} color={focused && isTV ? '#EAFBFF' : active ? theme['c-primary-font'] : theme['c-font']}>{item.name}</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={handleShowMenu} ref={moreButtonRef} style={styles.listMoreBtn}>
         <Icon name="dots-vertical" color={theme['c-350']} size={12} />
