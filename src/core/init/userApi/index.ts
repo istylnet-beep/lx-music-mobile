@@ -6,7 +6,7 @@ import { fetchData } from './request'
 import { addUserApi, getUserApiList } from '@/utils/data'
 import { getData, removeData } from '@/plugins/storage'
 import { storageDataPrefix } from '@/config/constant'
-import defaultYehuaScript from './defaultSources/yehua'
+import getDefaultYehuaScript from './defaultSources/yehua'
 import { confirmDialog, openUrl, tipDialog } from '@/utils/tools'
 
 
@@ -260,7 +260,7 @@ export default async(setting: LX.AppSetting) => {
     const isFirstInstall = await getData<boolean>(storageDataPrefix.firstInstallPending)
     if (isFirstInstall) {
       const userApiList = await getUserApiList()
-      if (!userApiList.some(api => api.name === '野花🌷')) await addUserApi(defaultYehuaScript)
+      if (!userApiList.some(api => api.name === '野花🌷')) await addUserApi(getDefaultYehuaScript())
       await removeData(storageDataPrefix.firstInstallPending)
     }
   } catch (error) {
