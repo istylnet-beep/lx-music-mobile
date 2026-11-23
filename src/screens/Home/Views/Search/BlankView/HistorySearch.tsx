@@ -5,6 +5,7 @@ import Button from '@/components/common/Button'
 import Text from '@/components/common/Text'
 import { createStyle } from '@/utils/tools'
 import { useTheme } from '@/store/theme/hook'
+import { useHorizontalMode } from '@/utils/hooks'
 import { useI18n } from '@/lang'
 import { clearHistoryList, getSearchHistory, removeHistoryWord } from '@/core/search/search'
 import { Icon } from '@/components/common/Icon'
@@ -18,13 +19,14 @@ const ListItem = ({ keyword, onSearch, onRemove }: {
   onRemove: (keyword: string) => void
 }) => {
   const theme = useTheme()
+  const isTV = useHorizontalMode()
   return (
     <Button
       style={{ ...styles.button, backgroundColor: theme['c-button-background'] }}
       onPress={() => { onSearch(keyword) }}
       onLongPress={() => { onRemove(keyword) }}
     >
-      <Text color={theme['c-button-font']} size={13}>{keyword}</Text>
+      <Text color={theme['c-button-font']} size={isTV ? 17 : 13}>{keyword}</Text>
     </Button>
   )
 }
@@ -119,12 +121,12 @@ const styles = createStyle({
   },
   button: {
     textAlign: 'center',
-    paddingLeft: 10,
-    paddingRight: 10,
-    paddingTop: 5,
-    paddingBottom: 5,
-    borderRadius: 4,
-    marginRight: 10,
-    marginTop: 8,
+    paddingLeft: 18,
+    paddingRight: 18,
+    paddingTop: 10,
+    paddingBottom: 10,
+    borderRadius: 12,
+    marginRight: 14,
+    marginTop: 12,
   },
 })
