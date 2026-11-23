@@ -47,11 +47,21 @@ const getValueByPath = (value: any, path: string): any => {
 const fillTemplate = (value: string, musicInfo: LX.Music.MusicInfoOnline, quality: LX.Quality) => {
   return value
     .replace(/\\{source\\}/g, musicInfo.source)
-    .replace(/\\{id\\}/g, encodeURIComponent(musicInfo.id))
-    .replace(/\\{name\\}/g, encodeURIComponent(musicInfo.name))
-    .replace(/\\{artist\\}/g, encodeURIComponent(musicInfo.singer))
-    .replace(/\\{album\\}/g, encodeURIComponent(musicInfo.meta.albumName ?? ''))
+    .replace(/\\{id\\}/g, String(musicInfo.id))
+    .replace(/\\{name\\}/g, musicInfo.name)
+    .replace(/\\{artist\\}/g, musicInfo.singer)
+    .replace(/\\{album\\}/g, musicInfo.meta.albumName ?? '')
     .replace(/\\{quality\\}/g, quality)
+}
+
+const fillUrlTemplate = (value: string, musicInfo: LX.Music.MusicInfoOnline, quality: LX.Quality) => {
+  return value.replace(/\\{(source|id|name|artist|album|quality)\\}/g, (_, key: string) => {
+    const values: Record<string, string> = {
+      source: musicInfo.source, id: String(musicInfo.id), name: musicInfo.name,
+      artist: musicInfo.singer, album: musicInfo.meta.albumName ?? '', quality,
+    }
+    return encodeURIComponent(values[key] ?? '')
+  })
 }
 
 const isPlayableUrl = (value: unknown): value is string => {
@@ -96,7 +106,7 @@ const requestProfile = async(profile: MusicParserProfile, musicInfo: LX.Music.Mu
     album: musicInfo.meta.albumName ?? '',
     quality,
   }
-  let url = fillTemplate(profile.url, musicInfo, quality)
+  let url = fillUrlTemplate(profile.url, musicInfo, quality)
   const headers = { ...profile.headers }
   let body: string | undefined
   const params: Record<string, string> = { ...profile.params }
