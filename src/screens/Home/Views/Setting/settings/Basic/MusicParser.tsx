@@ -106,7 +106,7 @@ export default memo(() => {
       setProfiles(next)
       setForm(null)
     } catch (error: any) {
-      Alert.alert(t('music_parser_title'), error?.message ?? t('music_parser_invalid_json'))
+      Alert.alert(t('music_parser_title'), String(error?.message ?? t('music_parser_invalid_json')))
     }
   }
   const toggle = async(profile: MusicParserProfile, enabled: boolean) => {
@@ -140,7 +140,7 @@ export default memo(() => {
       })
       Alert.alert(t('music_parser_test'), result.url)
     } catch (error: any) {
-      Alert.alert(t('music_parser_test_failed'), error?.message ?? String(error))
+      Alert.alert(t('music_parser_test_failed'), String(error?.message ?? error))
     } finally {
       setTesting(false)
     }
@@ -159,24 +159,24 @@ export default memo(() => {
                 {form
                   ? (
                       <ScrollView keyboardShouldPersistTaps="always">
-                        <Field label={t('music_parser_name')} value={form.name} onChangeText={value => updateForm('name', value)} />
+                        <Field label={t('music_parser_name')} value={form.name} onChangeText={value => { updateForm('name', value) }} />
                         <View style={styles.row}>
-                          <Button onPress={() => updateForm('format', 'json')}>{form.format === 'json' ? '✓ ' : ''}JSON API</Button>
-                          <Button onPress={() => updateForm('format', 'meting')}>{form.format === 'meting' ? '✓ ' : ''}Meting</Button>
+                          <Button onPress={() => { updateForm('format', 'json') }}>{form.format === 'json' ? '✓ ' : ''}JSON API</Button>
+                          <Button onPress={() => { updateForm('format', 'meting') }}>{form.format === 'meting' ? '✓ ' : ''}Meting</Button>
                         </View>
-                        <Field label={t('music_parser_url')} value={form.url} onChangeText={value => updateForm('url', value)} placeholder="https://api.example.com/..." />
+                        <Field label={t('music_parser_url')} value={form.url} onChangeText={value => { updateForm('url', value) }} placeholder="https://api.example.com/..." />
                         <View style={styles.row}>
-                          <Button onPress={() => updateForm('method', 'GET')}>{form.method === 'GET' ? '✓ ' : ''}GET</Button>
-                          <Button onPress={() => updateForm('method', 'POST')}>{form.method === 'POST' ? '✓ ' : ''}POST</Button>
+                          <Button onPress={() => { updateForm('method', 'GET') }}>{form.method === 'GET' ? '✓ ' : ''}GET</Button>
+                          <Button onPress={() => { updateForm('method', 'POST') }}>{form.method === 'POST' ? '✓ ' : ''}POST</Button>
                         </View>
-                        <Field label={t('music_parser_response_path')} value={form.responsePath} onChangeText={value => updateForm('responsePath', value)} placeholder="data.url（可留空自動判斷）" />
+                        <Field label={t('music_parser_response_path')} value={form.responsePath} onChangeText={value => { updateForm('responsePath', value) }} placeholder="data.url（可留空自動判斷）" />
                         <Field label={t('music_parser_params')} value={paramsText} onChangeText={setParamsText} multiline />
                         <Field label={t('music_parser_headers')} value={headersText} onChangeText={setHeadersText} multiline />
                         {form.method === 'POST'
-                          ? <Field label={t('music_parser_body')} value={form.body} onChangeText={value => updateForm('body', value)} multiline />
+                          ? <Field label={t('music_parser_body')} value={form.body} onChangeText={value => { updateForm('body', value) }} multiline />
                           : null}
-                        <Field label={t('music_parser_timeout')} value={String(form.timeout)} onChangeText={value => updateForm('timeout', Number(value) || 10000)} />
-                        <CheckBox check={form.enabled} label={t('music_parser_enabled')} onChange={value => updateForm('enabled', value)} />
+                        <Field label={t('music_parser_timeout')} value={String(form.timeout)} onChangeText={value => { updateForm('timeout', Number(value) || 10000) }} />
+                        <CheckBox check={form.enabled} label={t('music_parser_enabled')} onChange={value => { updateForm('enabled', value) }} />
                       </ScrollView>
                     )
                   : (
@@ -205,7 +205,7 @@ export default memo(() => {
                 {form
                   ? (
                       <>
-                        <Button onPress={() => setForm(null)}>{t('cancel')}</Button>
+                        <Button onPress={() => { setForm(null) }}>{t('cancel')}</Button>
                         <Button disabled={testing} onPress={() => { void test() }}>{testing ? t('loading') : t('music_parser_test')}</Button>
                         <Button onPress={() => { void save() }}>{t('confirm')}</Button>
                       </>
@@ -213,7 +213,7 @@ export default memo(() => {
                   : (
                       <>
                         <Button onPress={add}>{t('music_parser_add')}</Button>
-                        <Button onPress={() => dialogRef.current?.setVisible(false)}>{t('close')}</Button>
+                        <Button onPress={() => { dialogRef.current?.setVisible(false) }}>{t('close')}</Button>
                       </>
                     )}
               </View>
