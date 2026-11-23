@@ -7,6 +7,7 @@ import { getUserApiList } from '@/utils/data'
 import { getData, saveData } from '@/plugins/storage'
 import { storageDataPrefix } from '@/config/constant'
 import { confirmDialog, openUrl, tipDialog } from '@/utils/tools'
+import getYehuaSource from './defaultSources/yehua'
 
 
 export default async(setting: LX.AppSetting) => {
@@ -263,7 +264,7 @@ export default async(setting: LX.AppSetting) => {
       const userApiList = await getUserApiList()
       const existingYehuaApi = userApiList.find(api => api.name.includes('野花'))
       if (!existingYehuaApi) {
-        const script = getDefaultYehuaScript()
+        const script = getYehuaSource()
         if (typeof script !== 'string' || !script.trim().startsWith('/*')) {
           throw new Error('預設野花音源腳本解壓縮結果無效')
         }
