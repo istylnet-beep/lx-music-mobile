@@ -68,7 +68,7 @@ export const buildActiveThemeColors = (theme: LX.Theme): LX.ActiveTheme => {
     theme.config.extInfo[k] = theme.config.themeColors[v.replace(varColorRxp, '$1') as ColorsKey]
   }
 
-  return {
+  const activeTheme = {
     id: theme.id,
     name: theme.name,
     isDark: theme.isDark,
@@ -94,6 +94,36 @@ export const buildActiveThemeColors = (theme: LX.Theme): LX.ActiveTheme => {
     'c-border-background': theme.config.themeColors['c-primary-light-100-alpha-700'],
     'bg-image': bgImg,
   } as const
+
+  if (theme.id === 'black') {
+    return {
+      ...activeTheme,
+      'c-app-background': '#000000',
+      'c-main-background': '#000000',
+      'c-content-background': '#000000',
+      'c-border-background': '#17232D',
+      'bg-image': undefined,
+      'c-primary': '#28C8F5',
+      'c-primary-font': '#42CFF8',
+      'c-primary-font-hover': '#72DFFF',
+      'c-primary-font-active': '#B1F0FF',
+      'c-primary-background': 'rgba(40, 200, 245, 0.16)',
+      'c-primary-background-hover': 'rgba(40, 200, 245, 0.23)',
+      'c-primary-background-active': 'rgba(40, 200, 245, 0.30)',
+      'c-primary-input-background': 'rgba(40, 200, 245, 0.12)',
+      'c-button-font': '#EAFBFF',
+      'c-button-font-selected': '#00131C',
+      'c-button-background': 'rgba(40, 200, 245, 0.18)',
+      'c-button-background-selected': '#28C8F5',
+      'c-button-background-hover': 'rgba(40, 200, 245, 0.28)',
+      'c-button-background-active': 'rgba(40, 200, 245, 0.38)',
+      'c-list-header-border-bottom': 'rgba(40, 200, 245, 0.38)',
+      'c-font': '#F2F6FA',
+      'c-font-label': '#AAB7C4',
+      'c-primary-font': '#42CFF8',
+    }
+  }
+  return activeTheme
 }
 
 
