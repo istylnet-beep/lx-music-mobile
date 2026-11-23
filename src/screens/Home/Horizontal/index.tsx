@@ -5,6 +5,7 @@ import StatusBar from '@/components/common/StatusBar'
 import Header from './Header'
 import Main from './Main'
 import { createStyle } from '@/utils/tools'
+import { useTheme } from '@/store/theme/hook'
 
 const styles = createStyle({
   container: {
@@ -18,15 +19,16 @@ const styles = createStyle({
 })
 
 export default () => {
+  const theme = useTheme()
   return (
     <>
       <StatusBar />
       <View style={styles.container}>
         <Aside />
-        <View style={styles.content}>
+        <PlayerBar isHome />
+        <View style={{ ...styles.content, backgroundColor: theme['c-content-background'] }}>
           <Header />
           <Main />
-          <PlayerBar isHome />
         </View>
       </View>
     </>
