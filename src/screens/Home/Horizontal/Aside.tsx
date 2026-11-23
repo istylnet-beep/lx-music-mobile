@@ -80,8 +80,8 @@ const MenuItem = ({ id, icon, onPress }: {
       focusable
       hasTVPreferredFocus={selected}
       style={[styles.menuItem, (selected || focused) && styles.focusedMenuItem]}
-      onFocus={() => setFocused(true)}
-      onBlur={() => setFocused(false)}
+      onFocus={() => { setFocused(true) }}
+      onBlur={() => { setFocused(false) }}
       onPress={() => { onPress(id) }}
       activeOpacity={0.85}
     >
