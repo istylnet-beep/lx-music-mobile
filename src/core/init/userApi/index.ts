@@ -1,12 +1,10 @@
 import { type InitParams, onScriptAction, sendAction, type ResponseParams, type UpdateInfoParams, type RequestParams } from '@/utils/nativeModules/userApi'
-import { log, setUserApiList, setUserApiStatus } from '@/core/userApi'
+import { importUserApi, log, setUserApiList, setUserApiStatus } from '@/core/userApi'
 import settingState from '@/store/setting/state'
 import BackgroundTimer from 'react-native-background-timer'
 import { fetchData } from './request'
-import { addUserApi, getUserApiList } from '@/utils/data'
+import { getUserApiList } from '@/utils/data'
 import { getData, saveData } from '@/plugins/storage'
-import { storageDataPrefix } from '@/config/constant'
-import getDefaultYehuaScript from './defaultSources/yehua'
 import { confirmDialog, openUrl, tipDialog } from '@/utils/tools'
 
 
@@ -255,34 +253,30 @@ export default async(setting: LX.AppSetting) => {
     }
   })
 
-  // 野花🌷僅自動加入管理清單，不自動啟用或切換目前音源。
-  // V3 使用獨立旗標，確保曾執行過失敗的舊版 V2 遷移也能重新補入一次。
-  // V3 完成後若使用者自行刪除，不會在每次啟動時重新加入。
+  // 野花🌷沿用應用程式原生自訂音源匯入流程，僅加入管理清單，不自動啟用。
+  // V4 讓先前已執行 V2/V3 但實機清單仍未出現的舊安裝能重新匯入一次。
+  // 完成後若使用者自行刪除，不會在每次啟動時重新加入。
   try {
-    const migrationCompleted = await getData<boolean>(storageDataPrefix.yehuaDefaultSourceMigrationV3)
+    const migrationCompleted = await getData<boolean>('@yehua_default_source_migration_v4')
     if (!migrationCompleted) {
-      let userApiList = await getUserApiList()
+      const userApiList = await getUserApiList()
       const existingYehuaApi = userApiList.find(api => api.name.includes('野花'))
-      const yehuaApi = existingYehuaApi ?? await (async() => {
+      if (!existingYehuaApi) {
         const script = getDefaultYehuaScript()
         if (typeof script !== 'string' || !script.trim().startsWith('/*')) {
           throw new Error('預設野花音源腳本解壓縮結果無效')
         }
-        return addUserApi(script)
-      })()
-      if (yehuaApi.name !== '野花🌷') {
-        userApiList = userApiList.map(api => api.id === yehuaApi.id ? { ...api, name: '野花🌷' } : api)
-        await saveData(storageDataPrefix.userApi, userApiList)
+        await importUserApi(script)
       }
-      userApiList = await getUserApiList()
-      if (!userApiList.some(api => api.id === yehuaApi.id && api.name === '野花🌷')) {
+      const verifiedList = await getUserApiList()
+      if (!verifiedList.some(api => api.name.includes('野花'))) {
         throw new Error('野花音源未成功寫入自訂來源清單')
       }
-      await saveData(storageDataPrefix.yehuaDefaultSourceMigrationV3, true)
-      console.info('Default user API source migration V3 completed: 野花🌷')
+      await saveData('@yehua_default_source_migration_v4', true)
+      console.info('Default user API source migration V4 completed: 野花🌷')
     }
   } catch (error) {
-    console.warn('Failed to migrate default user API source V3; will retry on next launch:', error)
+    console.warn('Failed to migrate default user API source V4; will retry on next launch:', error)
   }
 
   setUserApiList(await getUserApiList())
