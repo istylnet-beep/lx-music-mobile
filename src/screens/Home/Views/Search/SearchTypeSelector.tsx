@@ -72,7 +72,6 @@ const styles = createStyle({
     paddingHorizontal: 12,
     // height: 38,
     // lineHeight: 38,
-    justifyContent: 'center',
     paddingLeft: 8,
     paddingRight: 8,
     // width: 80,
