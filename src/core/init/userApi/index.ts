@@ -256,10 +256,10 @@ export default async(setting: LX.AppSetting) => {
   })
 
   // 野花🌷沿用應用程式原生自訂音源匯入流程，僅加入管理清單，不自動啟用。
-  // V4 讓先前已執行 V2/V3 但實機清單仍未出現的舊安裝能重新匯入一次。
+  // V5 使用全新標記，避免舊版 V4 已誤標完成而讓舊安裝跳過匯入。
   // 完成後若使用者自行刪除，不會在每次啟動時重新加入。
   try {
-    const migrationCompleted = await getData<boolean>(storageDataPrefix.yehuaDefaultSourceMigrationV4)
+    const migrationCompleted = await getData<boolean>(storageDataPrefix.yehuaDefaultSourceMigrationV5)
     if (!migrationCompleted) {
       const userApiList = await getUserApiList()
       const existingYehuaApi = userApiList.find(api => api.name.includes('野花'))
@@ -275,7 +275,7 @@ export default async(setting: LX.AppSetting) => {
         throw new Error('野花音源未成功寫入自訂來源清單')
       }
       await saveData(storageDataPrefix.yehuaDefaultSourceMigrationV4, true)
-      console.info('Default user API source migration V4 completed: 野花🌷')
+      console.info('Default user API source migration V5 completed: 野花🌷')
     }
   } catch (error) {
     console.warn('Failed to migrate default user API source V4; will retry on next launch:', error)
