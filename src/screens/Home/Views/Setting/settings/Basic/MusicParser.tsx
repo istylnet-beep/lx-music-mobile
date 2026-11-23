@@ -184,7 +184,7 @@ export default memo(() => {
                                   <CheckBox check={profile.enabled} label={t('music_parser_enabled')} onChange={value => { void toggle(profile, value) }} />
                                 </View>
                                 <View style={styles.profileActions}>
-                                  <Button onPress={() => edit(profile)}>{t('edit')}</Button>
+                                  <Button onPress={() => edit(profile)}>{t('music_parser_edit')}</Button>
                                   <Button onPress={() => { void remove(profile) }}>{t('delete')}</Button>
                                 </View>
                               </View>
