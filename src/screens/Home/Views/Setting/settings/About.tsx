@@ -60,45 +60,45 @@ export default memo(() => {
   return (
     <Section title={t('setting_about')}>
       <View style={styles.part}>
-        <Text style={styles.text} >本软件完全免费，代码已开源。开源地址：</Text>
+        <Text style={styles.text} >本應用程式完全免費，原始碼已公開。專案原始碼：</Text>
         <TouchableOpacity onPress={openHomePage}>
           <Text style={textLinkStyle}>https://github.com/lyswhut/lx-music-mobile</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.part}>
-        <Text style={styles.text} >软件的常见问题可转至：</Text>
+        <Text style={styles.text} >常見問題請參閱：</Text>
         <TouchableOpacity onPress={openFAQPage}>
-          <Text style={textLinkStyle}>移动版常见问题</Text>
+          <Text style={textLinkStyle}>行動版常見問題</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.part}>
-        <Text style={styles.text}><Text style={styles.boldText}>本软件没有客服</Text>，但我们整理了一些常见的使用问题。<Text style={styles.boldText} >仔细、仔细、仔细</Text>地阅读常见问题后，</Text>
-        <Text style={styles.text}>仍有问题可到 GitHub </Text>
+        <Text style={styles.text}><Text style={styles.boldText}>本應用程式沒有客服</Text>，，但我們整理了常見的使用問題。<Text style={styles.boldText} >務必仔細閱讀</Text>地阅读常见问题后，</Text>
+        <Text style={styles.text}>若仍有疑問，可至 GitHub </Text>
         <TouchableOpacity onPress={openIssuePage}>
-          <Text style={textLinkStyle}>提交 Issue</Text>
+          <Text style={textLinkStyle}>回報問題（Issue）</Text>
         </TouchableOpacity>
         <Text style={styles.text}>。</Text>
       </View>
       <View style={styles.part}>
-        <Text style={styles.text}>由于软件开发的初衷仅是为了对新技术的学习与研究，因此软件直至停止维护都将会一直保持纯净。</Text>
+        <Text style={styles.text}>本專案最初是為了學習與研究新技術而開發，因此即使停止維護，也會維持純淨、不加入廣告。</Text>
       </View>
       <View style={styles.part}>
-        <Text style={styles.text}>目前本项目的原始发布地址<Text style={styles.boldText}>只有 GitHub</Text>，其他渠道均为第三方转载发布，可信度请自行鉴别。</Text>
+        <Text style={styles.text}>本專案唯一的原始發布管道<Text style={styles.boldText}>只有 GitHub</Text>，其他管道皆為第三方轉載，請自行判斷可信度。</Text>
       </View>
       <View style={styles.part}>
-        <Text style={styles.text}><Text style={styles.boldText}>本项目没有微信公众号之类的所谓「官方账号」，也未在小米、华为、vivo 等应用商店发布同名应用，谨防被骗！</Text></Text>
+        <Text style={styles.text}><Text style={styles.boldText}>本專案沒有微信公眾號等所謂的「官方帳號」，也未在小米、華為、vivo 等應用商店上架同名應用，請提高警覺，以免受騙！</Text></Text>
       </View>
       <View style={styles.part}>
-        <Text style={styles.text}>若你使用过程中遇到<Text style={styles.boldText}>广告</Text>或者<Text style={styles.boldText}>引流</Text>（如需要加群、关注公众号之类才能使用或者升级）的信息，则表明你当前运行的软件是「第三方修改版」。</Text>
+        <Text style={styles.text}>若使用時遇到<Text style={styles.boldText}>廣告</Text>或<Text style={styles.boldText}>導流</Text>訊息（例如要求加入群組、追蹤公眾號才能使用或更新），表示目前使用的可能是「第三方修改版」。</Text>
       </View>
       <View style={styles.part}>
-        <Text style={styles.text}>若在升级新版本时提示「<Text style={styles.boldText}>签名不一致</Text>」，则表明你手机上的旧版本或者将要安装的新版本中<Text style={styles.boldText}>有一方</Text>是「<Text style={styles.boldText}>第三方修改版</Text>」。</Text>
+        <Text style={styles.text}>若安裝新版時出現「<Text style={styles.boldText}>簽章不一致</Text>」提示，表示手機上的舊版或準備安裝的新版中<Text style={styles.boldText}>其中一方</Text>可能是「<Text style={styles.boldText}>第三方修改版</Text>」。</Text>
       </View>
       <View style={styles.part}>
-        <Text style={styles.text}>你已签署本软件的</Text>
+        <Text style={styles.text}>你已簽署本應用程式的</Text>
         <TouchableOpacity onPress={openPactModal}><Text style={styles.text} color={theme['c-primary-font']}>许可协议</Text></TouchableOpacity>
-        <Text style={styles.text}>，协议的在线版本在</Text>
-        <TouchableOpacity onPress={openPartPage}><Text style={textLinkStyle}>这里</Text></TouchableOpacity>
+        <Text style={styles.text}>，協議的線上版本請參閱</Text>
+        <TouchableOpacity onPress={openPartPage}><Text style={textLinkStyle}>這裡</Text></TouchableOpacity>
         <Text style={styles.text}>。</Text>
       </View>
       <View style={styles.part}>
