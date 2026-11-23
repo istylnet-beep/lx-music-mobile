@@ -18,8 +18,8 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   tvImage: {
-    width: 148,
-    height: 148,
+    width: 136,
+    height: 136,
     borderRadius: 10,
   },
 })
