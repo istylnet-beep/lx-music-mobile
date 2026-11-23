@@ -153,10 +153,10 @@ globalThis.lx_setup = (key, id, name, description, version, author, homepage, ra
   // Keep the values aligned with the app's public custom-source API types.
   const supportedQualitys = ['128k', '192k', '320k', 'flac', 'flac24bit', 'ape', 'wav']
   const supportedActions = ['musicUrl', 'lyric', 'pic']
-  const isValidSourceId = source => /^[a-zA-Z0-9_-]{1,32}$/.test(source)
-    && source !== '__proto__'
-    && source !== 'prototype'
-    && source !== 'constructor'
+  const isValidSourceId = source => /^[a-zA-Z0-9_-]{1,32}$/.test(source) &&
+    source !== '__proto__' &&
+    source !== 'prototype' &&
+    source !== 'constructor'
 
   const verifyLyricInfo = (info) => {
     if (typeof info != 'object' || typeof info.lyric != 'string') throw new Error('failed')
