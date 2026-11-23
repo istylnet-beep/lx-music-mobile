@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import { memo, useState } from 'react'
 import { ScrollView, TouchableOpacity, View } from 'react-native'
 import { useNavActiveId, useStatusbarHeight } from '@/store/common/hook'
 import { useTheme } from '@/store/theme/hook'
@@ -72,18 +72,24 @@ const MenuItem = ({ id, icon, onPress }: {
 }) => {
   const activeId = useNavActiveId()
   const theme = useTheme()
+  const [focused, setFocused] = useState(false)
+  const selected = activeId == id
 
-  return activeId == id
-    ? <View style={styles.menuItem}>
-        <View style={styles.iconContent}>
-          <Icon name={icon} size={20} color={theme['c-primary-font-active']} />
-        </View>
+  return (
+    <TouchableOpacity
+      focusable
+      hasTVPreferredFocus={selected}
+      style={[styles.menuItem, (selected || focused) && styles.focusedMenuItem]}
+      onFocus={() => setFocused(true)}
+      onBlur={() => setFocused(false)}
+      onPress={() => { onPress(id) }}
+      activeOpacity={0.85}
+    >
+      <View style={styles.iconContent}>
+        <Icon name={icon} size={22} color={selected || focused ? '#42CFF8' : theme['c-font-label']} />
       </View>
-    : <TouchableOpacity style={styles.menuItem} onPress={() => { onPress(id) }}>
-        <View style={styles.iconContent}>
-          <Icon name={icon} size={20} color={theme['c-font-label']} />
-        </View>
-      </TouchableOpacity>
+    </TouchableOpacity>
+  )
 }
 
 export default memo(() => {
