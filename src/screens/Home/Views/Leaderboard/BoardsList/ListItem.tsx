@@ -5,6 +5,7 @@ import Button, { type BtnType } from '@/components/common/Button'
 import { createStyle } from '@/utils/tools'
 import { type BoardItem } from '@/store/leaderboard/state'
 import { Icon } from '@/components/common/Icon'
+import useHorizontalMode from '@/utils/hooks/useHorizontalMode'
 
 // index={index}
 // longPressIndex={longPressIndex}
@@ -22,6 +23,7 @@ export interface ListItemProps {
 
 export default ({ item, activeId, index, longPressIndex, onBoundChange, onShowMenu }: ListItemProps) => {
   const theme = useTheme()
+  const isTV = useHorizontalMode()
   const buttonRef = useRef<BtnType>(null)
 
   const setPosition = useCallback(() => {
@@ -38,7 +40,7 @@ export default ({ item, activeId, index, longPressIndex, onBoundChange, onShowMe
   return (
     <Button
       ref={buttonRef}
-      style={{ ...styles.button, backgroundColor: index == longPressIndex ? theme['c-button-background-active'] : undefined }}
+      style={{ ...styles.button, minHeight: isTV ? 54 : undefined, paddingLeft: isTV ? 10 : 5, paddingRight: isTV ? 12 : 10, backgroundColor: index == longPressIndex ? theme['c-button-background-active'] : undefined }}
       key={item.id} onLongPress={setPosition}
       onPress={() => { onBoundChange(item) }}
     >
@@ -47,7 +49,7 @@ export default ({ item, activeId, index, longPressIndex, onBoundChange, onShowMe
           ? <Icon style={styles.listActiveIcon} name="chevron-right" size={12} color={theme['c-primary-font']} />
           : null
       }
-      <Text style={styles.listName} size={14} textBreakStrategy="simple" color={active ? theme['c-primary-font-active'] : theme['c-font']} numberOfLines={1}>{item.name}</Text>
+      <Text style={styles.listName} size={isTV ? 17 : 14} textBreakStrategy="simple" color={active ? theme['c-primary-font-active'] : theme['c-font']} numberOfLines={1}>{item.name}</Text>
     </Button>
   )
 }
