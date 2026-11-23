@@ -149,24 +149,14 @@ globalThis.lx_setup = (key, id, name, description, version, author, homepage, ra
   const events = {
     request: null,
   }
-  const allSources = ['kw', 'kg', 'tx', 'wy', 'mg', 'local']
-  const supportQualitys = {
-    kw: ['128k', '320k', 'flac', 'flac24bit'],
-    kg: ['128k', '320k', 'flac', 'flac24bit'],
-    tx: ['128k', '320k', 'flac', 'flac24bit'],
-    wy: ['128k', '320k', 'flac', 'flac24bit'],
-    mg: ['128k', '320k', 'flac', 'flac24bit'],
-    local: [],
-  }
-  const supportActions = {
-    kw: ['musicUrl'],
-    kg: ['musicUrl'],
-    tx: ['musicUrl'],
-    wy: ['musicUrl'],
-    mg: ['musicUrl'],
-    xm: ['musicUrl'],
-    local: ['musicUrl', 'lyric', 'pic'],
-  }
+  // Accept platform identifiers declared by each script instead of a fixed provider list.
+  // Keep the values aligned with the app's public custom-source API types.
+  const supportedQualitys = ['128k', '192k', '320k', 'flac', 'flac24bit', 'ape', 'wav']
+  const supportedActions = ['musicUrl', 'lyric', 'pic']
+  const isValidSourceId = source => /^[a-zA-Z0-9_-]{1,32}$/.test(source)
+    && source !== '__proto__'
+    && source !== 'prototype'
+    && source !== 'constructor'
 
   const verifyLyricInfo = (info) => {
     if (typeof info != 'object' || typeof info.lyric != 'string') throw new Error('failed')
@@ -316,19 +306,30 @@ globalThis.lx_setup = (key, id, name, description, version, author, homepage, ra
       sources: {},
     }
     try {
-      for (const source of allSources) {
-        const userSource = info.sources[source]
-        if (!userSource || userSource.type !== 'music') continue
-        const qualitys = supportQualitys[source]
-        const actions = supportActions[source]
+      if (!info.sources || typeof info.sources !== 'object' || Array.isArray(info.sources)) {
+        throw new Error('Invalid sources declaration')
+      }
+      for (const [source, userSource] of Object.entries(info.sources)) {
+        if (!isValidSourceId(source) || !userSource || typeof userSource !== 'object') continue
+        if (userSource.type !== 'music') continue
+        const actions = Array.isArray(userSource.actions)
+          ? supportedActions.filter(action => userSource.actions.includes(action))
+          : []
+        const qualitys = Array.isArray(userSource.qualitys)
+          ? supportedQualitys.filter(quality => userSource.qualitys.includes(quality))
+          : []
+        if (!actions.length) continue
         sourceInfo.sources[source] = {
+          name: typeof userSource.name === 'string' ? userSource.name.substring(0, 48) : source,
           type: 'music',
-          actions: actions.filter(a => userSource.actions.includes(a)),
-          qualitys: qualitys.filter(q => userSource.qualitys.includes(q)),
+          actions,
+          qualitys,
         }
       }
+      if (!Object.keys(sourceInfo.sources).length) {
+        throw new Error('No supported music source was declared')
+      }
     } catch (error) {
-      // console.log(error)
       nativeCall(NATIVE_EVENTS_NAMES.init, { info: null, status: false, errorMessage: error.message })
       return
     }
