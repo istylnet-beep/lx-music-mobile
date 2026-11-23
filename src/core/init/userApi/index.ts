@@ -255,16 +255,27 @@ export default async(setting: LX.AppSetting) => {
     }
   })
 
-  // 僅全新安裝預載入一次；舊版升級及使用者刪除後都不會重新加入。
+  // 僅全新安裝預載入一次；成功寫入並重新讀取確認後才清除標記。
   try {
     const isFirstInstall = await getData<boolean>(storageDataPrefix.firstInstallPending)
     if (isFirstInstall) {
-      const userApiList = await getUserApiList()
-      if (!userApiList.some(api => api.name === '野花🌷')) await addUserApi(getDefaultYehuaScript())
+      let userApiList = await getUserApiList()
+      if (!userApiList.some(api => api.name === '野花🌷')) {
+        const script = getDefaultYehuaScript()
+        if (typeof script !== 'string' || !script.trim().startsWith('/*')) {
+          throw new Error('預設野花音源腳本解壓縮結果無效')
+        }
+        const addedApi = await addUserApi(script)
+        userApiList = await getUserApiList()
+        if (!userApiList.some(api => api.id === addedApi.id && api.name === '野花🌷')) {
+          throw new Error('預設野花音源寫入後未能從自訂來源清單讀回')
+        }
+      }
       await removeData(storageDataPrefix.firstInstallPending)
+      console.info('Default user API source preload completed: 野花🌷')
     }
   } catch (error) {
-    console.warn('Failed to preload default user API source:', error)
+    console.warn('Failed to preload default user API source; will retry on next launch:', error)
   }
 
   setUserApiList(await getUserApiList())
