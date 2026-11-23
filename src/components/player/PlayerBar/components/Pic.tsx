@@ -50,4 +50,4 @@ export default ({ isHome }: { isHome: boolean }) => {
       <Image url={musicInfo.pic} nativeID={NAV_SHEAR_NATIVE_IDS.playDetail_pic} style={[styles.image, isHome && styles.tvImage]} onError={handleError} />
     </TouchableOpacity>
   )
-})
+}
