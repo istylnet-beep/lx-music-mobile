@@ -11,6 +11,7 @@ import SourceSelector, {
 import SearchInput, { type SearchInputType, type SearchInputProps } from './SearchInput'
 import { createStyle } from '@/utils/tools'
 import { useTheme } from '@/store/theme/hook'
+import { useHorizontalMode } from '@/utils/hooks'
 import { type Source as MusicSource } from '@/store/search/music/state'
 import { type Source as SonglistSource } from '@/store/search/songlist/state'
 
@@ -37,6 +38,7 @@ export default forwardRef<HeaderBarType, HeaderBarProps>(({ onSourceChange, onTi
   const sourceSelectorRef = useRef<SourceSelectorType>(null)
   const searchInputRef = useRef<SearchInputType>(null)
   const theme = useTheme()
+  const isTV = useHorizontalMode()
 
   useImperativeHandle(ref, () => ({
     setSourceList(list, source) {
@@ -54,7 +56,7 @@ export default forwardRef<HeaderBarType, HeaderBarProps>(({ onSourceChange, onTi
   return (
     <View style={{ ...styles.searchBar, borderBottomColor: theme['c-border-background'] }}>
       <View style={styles.selector}>
-        <SourceSelector ref={sourceSelectorRef} onSourceChange={onSourceChange} center />
+        <SourceSelector ref={sourceSelectorRef} onSourceChange={onSourceChange} center fontSize={isTV ? 18 : 15} />
       </View>
       <SearchInput
         ref={searchInputRef}
