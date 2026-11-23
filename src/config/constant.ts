@@ -41,6 +41,7 @@ export const storageDataPrefix = {
   setting: '@setting_v1',
   firstInstallPending: '@first_install_pending',
   yehuaDefaultSourceInitialized: '@yehua_default_source_initialized',
+  yehuaDefaultSourceMigrationV2: '@yehua_default_source_migration_v2',
   userList: '@user_list',
   viewPrevState: '@view_prev_state',
 
