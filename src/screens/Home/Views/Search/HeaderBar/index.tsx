@@ -72,7 +72,7 @@ const styles = createStyle({
     flexDirection: 'row',
     height: 38,
     zIndex: 2,
-    paddingRight: 10,
+    paddingRight: 18,
     borderBottomWidth: BorderWidths.normal,
   },
   selector: {
