@@ -117,6 +117,15 @@ export default memo(() => {
     setProfiles(next)
     await saveMusicParserProfiles(next)
   }
+  const move = async(profile: MusicParserProfile, direction: number) => {
+    const index = profiles.findIndex(item => item.id === profile.id)
+    const target = index + direction
+    if (index < 0 || target < 0 || target >= profiles.length) return
+    const next = [...profiles]
+    ;[next[index], next[target]] = [next[target], next[index]]
+    setProfiles(next)
+    await saveMusicParserProfiles(next)
+  }
   const remove = async(profile: MusicParserProfile) => {
     const next = profiles.filter(item => item.id !== profile.id)
     setProfiles(next)
@@ -184,6 +193,8 @@ export default memo(() => {
                                   <CheckBox check={profile.enabled} label={t('music_parser_enabled')} onChange={value => { void toggle(profile, value) }} />
                                 </View>
                                 <View style={styles.profileActions}>
+                                  <Button onPress={() => { void move(profile, -1) }}>↑</Button>
+                                  <Button onPress={() => { void move(profile, 1) }}>↓</Button>
                                   <Button onPress={() => edit(profile)}>{t('music_parser_edit')}</Button>
                                   <Button onPress={() => { void remove(profile) }}>{t('delete')}</Button>
                                 </View>
