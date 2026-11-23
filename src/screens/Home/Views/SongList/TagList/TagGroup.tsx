@@ -5,6 +5,8 @@ import { type TagInfoItem } from '@/store/songlist/state'
 import { useTheme } from '@/store/theme/hook'
 import { createStyle } from '@/utils/tools'
 import Text from '@/components/common/Text'
+import { useHorizontalMode } from '@/utils/hooks'
+import { useState } from 'react'
 
 export interface TagGroupProps {
   name: string
@@ -15,6 +17,8 @@ export interface TagGroupProps {
 
 export default ({ name, list, onTagChange, activeId }: TagGroupProps) => {
   const theme = useTheme()
+  const isTV = useHorizontalMode()
+  const [focusedId, setFocusedId] = useState<string | null>(null)
   return (
     <View>
       {
@@ -32,11 +36,13 @@ export default ({ name, list, onTagChange, activeId }: TagGroupProps) => {
               )
             : (
                 <Button
-                  style={{ ...styles.tagButton, backgroundColor: theme['c-button-background'] }}
+                  style={{ ...styles.tagButton, backgroundColor: theme['c-button-background'], ...(isTV && focusedId == item.id ? styles.tvFocused : null) }}
                   key={item.id}
+                  onFocus={() => { setFocusedId(item.id) }}
+                  onBlur={() => { setFocusedId(null) }}
                   onPress={() => { onTagChange(item.name, item.id) }}
                 >
-                  <Text style={styles.tagButtonText} color={theme['c-font']} >{item.name}</Text>
+                  <Text style={[styles.tagButtonText, isTV && styles.tvTagButtonText]} color={theme['c-font']} >{item.name}</Text>
                 </Button>
               )
 
@@ -60,6 +66,16 @@ const styles = createStyle({
     borderRadius: 4,
     marginRight: 10,
     marginBottom: 10,
+  },
+  tvFocused: {
+    borderWidth: 2,
+    borderColor: '#42CFF8',
+    backgroundColor: '#102330',
+  },
+  tvTagButtonText: {
+    fontSize: 17,
+    paddingHorizontal: 18,
+    paddingVertical: 12,
   },
   tagButtonText: {
     fontSize: 13,
