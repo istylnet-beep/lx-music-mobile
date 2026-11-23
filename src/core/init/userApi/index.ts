@@ -1,12 +1,9 @@
 import { type InitParams, onScriptAction, sendAction, type ResponseParams, type UpdateInfoParams, type RequestParams } from '@/utils/nativeModules/userApi'
-import { importUserApi, log, setUserApiList, setUserApiStatus } from '@/core/userApi'
+import { log, setUserApiStatus } from '@/core/userApi'
 import settingState from '@/store/setting/state'
 import BackgroundTimer from 'react-native-background-timer'
 import { fetchData } from './request'
-import { getUserApiList } from '@/utils/data'
-import { getData } from '@/plugins/storage'
 import { confirmDialog, openUrl, tipDialog } from '@/utils/tools'
-import getYehuaSource from '../../userApi/defaultSources/yehua'
 
 
 export default async(setting: LX.AppSetting) => {
@@ -254,28 +251,4 @@ export default async(setting: LX.AppSetting) => {
     }
   })
 
-  // 野花🌷只補入自訂來源管理清單，不啟用、不切換目前音源。
-  // 不以舊版 migration marker 判斷是否已匯入；每次啟動只在清單缺少且使用者未自行刪除時補入。
-  // 使用者透過管理頁刪除野花時會寫入 tombstone，避免下次啟動重新加入。
-  try {
-    const userDeletedYehua = await getData<boolean>('@yehua_default_source_user_deleted')
-    const currentList = await getUserApiList()
-    const existingYehua = currentList.some(api => api.name === '野花🌷')
-    if (!existingYehua && !userDeletedYehua) {
-      const script = getYehuaSource()
-      if (typeof script !== 'string' || !script.trim().startsWith('/*')) {
-        throw new Error('野花腳本解壓或標頭驗證失敗')
-      }
-      await importUserApi(script)
-      const importedList = await getUserApiList()
-      if (!importedList.some(api => api.name === '野花🌷')) {
-        throw new Error('野花匯入後未出現在自訂來源清單')
-      }
-    }
-    setUserApiList(await getUserApiList())
-  } catch (error) {
-    console.warn('[Yehua] 自訂來源補入失敗：', error instanceof Error ? error.message : String(error))
-    // 匯入失敗不寫入完成標記，下次啟動可再次補入。
-    setUserApiList(await getUserApiList())
-  }
 }
