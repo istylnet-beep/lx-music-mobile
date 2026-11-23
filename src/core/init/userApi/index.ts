@@ -3,9 +3,8 @@ import { importUserApi, log, setUserApiList, setUserApiStatus } from '@/core/use
 import settingState from '@/store/setting/state'
 import BackgroundTimer from 'react-native-background-timer'
 import { fetchData } from './request'
-import { getUserApiList, getUserApiScript } from '@/utils/data'
-import { getData, saveData } from '@/plugins/storage'
-import { storageDataPrefix } from '@/config/constant'
+import { getUserApiList } from '@/utils/data'
+import { getData } from '@/plugins/storage'
 import { confirmDialog, openUrl, tipDialog } from '@/utils/tools'
 import getYehuaSource from '../../userApi/defaultSources/yehua'
 
