@@ -67,3 +67,5 @@ jobs:
         with:
           name: lx-music-mobile-source
           path: lx-music-mobile-v*-source.zip
+
+# Trigger beta build after re-enabling fork workflows.
