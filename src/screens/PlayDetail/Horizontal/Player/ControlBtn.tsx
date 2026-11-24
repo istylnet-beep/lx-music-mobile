@@ -20,8 +20,8 @@ const PrevBtn = ({ size }: { size: number }) => {
       focusable
       style={[styles.cotrolBtn, { width: size, height: size }, focused && styles.focusedBtn]}
       activeOpacity={0.8}
-      onFocus={() => setFocused(true)}
-      onBlur={() => setFocused(false)}
+      onFocus={() => { setFocused(true) }}
+      onBlur={() => { setFocused(false) }}
       onPress={handlePlayPrev}
     >
       <Icon name='prevMusic' color={focused ? theme['c-primary-font-active'] : theme['c-button-font']} rawSize={size * 0.7} />
