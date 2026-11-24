@@ -11,7 +11,10 @@ import {
   SYNC_MODE_MODAL,
 } from './screenNames'
 import SyncModeModal from './components/SyncModeModal'
-import { Home, PlayDetail, SonglistDetail, Comment } from '@/screens'
+import Home from '@/screens/Home'
+import PlayDetail from '@/screens/PlayDetail'
+import SonglistDetail from '@/screens/SonglistDetail'
+import Comment from '@/screens/Comment'
 
 function WrappedComponent(Component: any) {
   return function inject(props: Record<string, any>) {
