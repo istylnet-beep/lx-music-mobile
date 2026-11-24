@@ -1,4 +1,4 @@
-import { AppState, NativeEventEmitter, NativeModules } from 'react-native'
+import { AppState, Dimensions, NativeEventEmitter, NativeModules } from 'react-native'
 
 const { UtilsModule } = NativeModules
 
@@ -65,6 +65,12 @@ export const onScreenStateChange = (handler: (state: 'ON' | 'OFF') => void): () 
 }
 
 export const getWindowSize = async(): Promise<{ width: number, height: number }> => {
+  // Some Android TV builds do not expose getWindowSize from the native UtilsModule.
+  // Fall back to React Native Dimensions instead of aborting app startup.
+  if (typeof UtilsModule.getWindowSize !== 'function') {
+    const { width, height } = Dimensions.get('window')
+    return { width, height }
+  }
   return UtilsModule.getWindowSize()
 }
 
