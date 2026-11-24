@@ -9,9 +9,36 @@ import { listenLaunchEvent } from './navigation/regLaunchedEvent'
 import { tipDialog } from './utils/tools'
 
 console.log('starting app...')
+bootLog('App entry loaded.')
 listenLaunchEvent()
 
-void Promise.all([getFontSize(), windowSizeTools.init()]).then(async([fontSize]) => {
+const runStartupStep = async<T>(name: string, task: () => Promise<T>): Promise<T> => {
+  bootLog(`START: ${name}`)
+  try {
+    const result = await task()
+    bootLog(`DONE: ${name}`)
+    return result
+  } catch (err: any) {
+    bootLog(`FAILED: ${name}: ${err?.stack ?? err?.message ?? String(err)}`)
+    throw err
+  }
+}
+
+void Promise.all([
+  runStartupStep('Load font size setting', getFontSize),
+  runStartupStep('Initialize window dimensions', async() => {
+    // Avoid the optional native UtilsModule window-size API during startup.
+    // React Native Dimensions is available on Android TV and is sufficient here.
+    const { Dimensions, StatusBar } = require('react-native')
+    const window = Dimensions.get('window')
+    const size = {
+      width: Math.round(window.width),
+      height: Math.round(window.height) + (StatusBar.currentHeight ?? 0),
+    }
+    windowSizeTools.setWindowSize(size.width, size.height)
+    return size
+  }),
+]).then(async([fontSize]) => {
   global.lx.fontSize = fontSize
   bootLog('Font size setting loaded.')
 
