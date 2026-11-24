@@ -3,6 +3,7 @@ import { init as initLog } from '@/utils/log'
 import { bootLog, getBootLog } from '@/utils/bootLog'
 import '@/config/globalData'
 import { getFontSize } from '@/utils/data'
+import { Dimensions, StatusBar } from 'react-native'
 import { exitApp } from './utils/nativeModules/utils'
 import { windowSizeTools } from './utils/windowSizeTools'
 import { listenLaunchEvent } from './navigation/regLaunchedEvent'
@@ -29,7 +30,6 @@ void Promise.all([
   runStartupStep('Initialize window dimensions', async() => {
     // Avoid the optional native UtilsModule window-size API during startup.
     // React Native Dimensions is available on Android TV and is sufficient here.
-    const { Dimensions, StatusBar } = require('react-native')
     const window = Dimensions.get('window')
     const size = {
       width: Math.round(window.width),
