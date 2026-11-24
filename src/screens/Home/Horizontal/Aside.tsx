@@ -3,63 +3,62 @@ import { ScrollView, TouchableOpacity, View } from 'react-native'
 import { useNavActiveId, useStatusbarHeight } from '@/store/common/hook'
 import { useTheme } from '@/store/theme/hook'
 import { Icon } from '@/components/common/Icon'
+import Text from '@/components/common/Text'
 import { createStyle, exitApp as backHome } from '@/utils/tools'
 import { NAV_MENUS } from '@/config/constant'
 import type { InitState } from '@/store/common/state'
-// import commonState from '@/store/common/state'
 import { setNavActiveId } from '@/core/common'
 import { BorderWidths } from '@/theme'
 import { useSettingValue } from '@/store/setting/hook'
+import { useI18n } from '@/lang'
 
-const NAV_WIDTH = 84
+const NAV_WIDTH = 190
 
 const styles = createStyle({
   container: {
     flexGrow: 0,
-    // flex: 1,
-    // alignItems: 'center',
-    // justifyContent: 'center',
-    // padding: 10,
     borderRightWidth: BorderWidths.normal,
     paddingBottom: 10,
     width: NAV_WIDTH,
   },
   header: {
     paddingTop: 18,
-    paddingBottom: 18,
+    paddingBottom: 22,
+    paddingLeft: 20,
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
   },
   headerText: {
-    textAlign: 'center',
-    marginLeft: 16,
+    marginLeft: 10,
+    fontWeight: '600',
   },
   menus: {
     flex: 1,
   },
   list: {
-    // paddingTop: 10,
+    paddingTop: 8,
     paddingBottom: 15,
   },
   menuItem: {
+    minHeight: 54,
     flexDirection: 'row',
-    paddingTop: 18,
-    paddingBottom: 18,
-    // paddingLeft: 25,
-    // paddingRight: 25,
-    justifyContent: 'center',
+    paddingHorizontal: 18,
+    justifyContent: 'flex-start',
     alignItems: 'center',
-    // backgroundColor: 'rgba(0, 0, 0, 0.2)',
+  },
+  activeMenuItem: {
+    marginHorizontal: 8,
+    paddingHorizontal: 10,
+    borderRadius: 12,
   },
   iconContent: {
-    // width: 24,
-    // backgroundColor: 'rgba(0, 0, 0, 0.2)',
+    width: 30,
     alignItems: 'center',
   },
   text: {
-    paddingLeft: 15,
-    // fontWeight: '500',
+    paddingLeft: 12,
+    flexShrink: 1,
   },
 })
 
@@ -69,8 +68,8 @@ const Header = () => {
   return (
     <View style={{ paddingTop: statusBarHeight }}>
       <View style={styles.header}>
-        <Icon name="logo" color={theme['c-primary-dark-100-alpha-300']} size={22} />
-        {/* <Text style={styles.headerText} size={16} color={theme['c-primary-dark-100-alpha-300']}>LX Music</Text> */}
+        <Icon name="logo" color={theme['c-primary-dark-100-alpha-300']} size={28} />
+        <Text style={styles.headerText} size={18} color={theme['c-font']}>LX Music TV</Text>
       </View>
     </View>
   )
@@ -83,28 +82,28 @@ const MenuItem = ({ id, icon, onPress }: {
   icon: string
   onPress: (id: IdType) => void
 }) => {
-  // const t = useI18n()
   const activeId = useNavActiveId()
   const theme = useTheme()
+  const t = useI18n()
+  const active = activeId == id
 
-  return activeId == id
-    ? <View style={styles.menuItem}>
+  return active
+    ? <View style={{ ...styles.menuItem, ...styles.activeMenuItem, backgroundColor: theme['c-primary'] }}>
         <View style={styles.iconContent}>
-          <Icon name={icon} size={20} color={theme['c-primary-font-active']} />
+          <Icon name={icon} size={22} color={theme['c-primary-font-active']} />
         </View>
-        {/* <Text style={styles.text} size={14} color={theme['c-primary-font']}>{t(id)}</Text> */}
+        <Text style={styles.text} size={16} color={theme['c-primary-font-active']} weight="600">{id === 'back_home' ? t('back_home') : t(id)}</Text>
       </View>
     : <TouchableOpacity style={styles.menuItem} onPress={() => { onPress(id) }}>
         <View style={styles.iconContent}>
-          <Icon name={icon} size={20} color={theme['c-font-label']} />
+          <Icon name={icon} size={22} color={theme['c-font-label']} />
         </View>
-        {/* <Text style={styles.text} size={14}>{t(id)}</Text> */}
+        <Text style={styles.text} size={16} color={theme['c-font']}>{id === 'back_home' ? t('back_home') : t(id)}</Text>
       </TouchableOpacity>
 }
 
 export default memo(() => {
   const theme = useTheme()
-  // console.log('render drawer nav')
   const showBackBtn = useSettingValue('common.showBackBtn')
 
   const handlePress = (id: IdType) => {
@@ -132,4 +131,3 @@ export default memo(() => {
     </View>
   )
 })
-
