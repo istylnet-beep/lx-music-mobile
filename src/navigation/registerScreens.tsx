@@ -32,10 +32,15 @@ function WrappedComponent(loadComponent: () => any) {
 }
 
 export default () => {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   Navigation.registerComponent(HOME_SCREEN, () => WrappedComponent(() => require('@/screens/Home').default))
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   Navigation.registerComponent(PLAY_DETAIL_SCREEN, () => WrappedComponent(() => require('@/screens/PlayDetail').default))
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   Navigation.registerComponent(SONGLIST_DETAIL_SCREEN, () => WrappedComponent(() => require('@/screens/SonglistDetail').default))
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   Navigation.registerComponent(COMMENT_SCREEN, () => WrappedComponent(() => require('@/screens/Comment').default))
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   Navigation.registerComponent(SYNC_MODE_MODAL, () => WrappedComponent(() => require('./components/SyncModeModal').default))
 
   console.info('All screens have been registered...')
