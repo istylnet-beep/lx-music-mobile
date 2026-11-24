@@ -39,7 +39,7 @@ export default ({ isHome }: { isHome: boolean }) => {
     : ''
   // console.log(playMusicInfo)
   return (
-    <TouchableOpacity style={styles.container} onLongPress={handleLongPress} onPress={handlePress} activeOpacity={0.7} >
+    <TouchableOpacity style={[styles.container, isHome ? styles.homeContainer : null]} onLongPress={handleLongPress} onPress={handlePress} activeOpacity={0.7} >
       <Text color={theme['c-font-label']} numberOfLines={1}>{title}</Text>
     </TouchableOpacity>
   )
@@ -66,6 +66,11 @@ export default ({ isHome }: { isHome: boolean }) => {
 // }
 
 const styles = createStyle({
+  homeContainer: {
+    alignItems: 'center',
+    marginTop: 18,
+    paddingHorizontal: 8,
+  },
   container: {
     width: '100%',
     paddingHorizontal: 2,
