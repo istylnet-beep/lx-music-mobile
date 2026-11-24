@@ -89,13 +89,13 @@ const MenuItem = ({ id, icon, onPress }: {
         <View style={styles.iconContent}>
           <Icon name={icon} size={22} color={theme['c-primary-font-active']} />
         </View>
-        
+
       </View>
     : <TouchableOpacity style={styles.menuItem} onPress={() => { onPress(id) }}>
         <View style={styles.iconContent}>
           <Icon name={icon} size={22} color={theme['c-font-label']} />
         </View>
-        
+
       </TouchableOpacity>
 }
 
