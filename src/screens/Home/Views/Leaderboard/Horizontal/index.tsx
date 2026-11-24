@@ -42,9 +42,11 @@ export default () => {
         ref={leftBarRef}
         onChangeList={handleChangeBound}
       />
-      <MusicList
-        ref={musicListRef}
-      />
+      <View style={styles.content}>
+        <MusicList
+          ref={musicListRef}
+        />
+      </View>
     </View>
   )
 }
@@ -58,5 +60,10 @@ const styles = createStyle({
   },
   content: {
     flex: 1,
+    minWidth: 0,
+    paddingTop: 12,
+    paddingBottom: 8,
+    paddingLeft: 16,
+    paddingRight: 20,
   },
 })
