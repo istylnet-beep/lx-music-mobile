@@ -13,8 +13,8 @@ import {
 
 /**
  * Resolve screen modules only when React Native Navigation renders a screen.
- * Keeping screen imports out of this registration module prevents the app
- * bootstrap from eagerly evaluating the complete screen/component graph.
+ * Use relative module IDs here: Metro does not consistently apply the
+ * Babel path aliases to runtime require() calls.
  */
 function WrappedComponent(loadComponent: () => any) {
   return function inject(props: Record<string, any>) {
@@ -33,13 +33,13 @@ function WrappedComponent(loadComponent: () => any) {
 
 export default () => {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  Navigation.registerComponent(HOME_SCREEN, () => WrappedComponent(() => require('@/screens/Home').default))
+  Navigation.registerComponent(HOME_SCREEN, () => WrappedComponent(() => require('../screens/Home').default))
   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  Navigation.registerComponent(PLAY_DETAIL_SCREEN, () => WrappedComponent(() => require('@/screens/PlayDetail').default))
+  Navigation.registerComponent(PLAY_DETAIL_SCREEN, () => WrappedComponent(() => require('../screens/PlayDetail').default))
   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  Navigation.registerComponent(SONGLIST_DETAIL_SCREEN, () => WrappedComponent(() => require('@/screens/SonglistDetail').default))
+  Navigation.registerComponent(SONGLIST_DETAIL_SCREEN, () => WrappedComponent(() => require('../screens/SonglistDetail').default))
   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  Navigation.registerComponent(COMMENT_SCREEN, () => WrappedComponent(() => require('@/screens/Comment').default))
+  Navigation.registerComponent(COMMENT_SCREEN, () => WrappedComponent(() => require('../screens/Comment').default))
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   Navigation.registerComponent(SYNC_MODE_MODAL, () => WrappedComponent(() => require('./components/SyncModeModal').default))
 
