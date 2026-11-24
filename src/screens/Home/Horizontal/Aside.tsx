@@ -8,22 +8,20 @@ import { createStyle, exitApp as backHome } from '@/utils/tools'
 import { NAV_MENUS } from '@/config/constant'
 import type { InitState } from '@/store/common/state'
 import { setNavActiveId } from '@/core/common'
-import { BorderWidths } from '@/theme'
 import { useSettingValue } from '@/store/setting/hook'
 
-const NAV_WIDTH = 64
+const NAV_WIDTH = 52
 
 const styles = createStyle({
   container: {
     flexGrow: 0,
     flexShrink: 0,
-    borderRightWidth: BorderWidths.normal,
-    paddingBottom: 8,
+    paddingBottom: 4,
     width: NAV_WIDTH,
   },
   header: {
-    paddingTop: 18,
-    paddingBottom: 18,
+    paddingTop: 14,
+    paddingBottom: 14,
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
@@ -40,21 +38,15 @@ const styles = createStyle({
   list: {
     flex: 1,
     justifyContent: 'space-evenly',
-    paddingTop: 4,
-    paddingBottom: 4,
+    paddingTop: 2,
+    paddingBottom: 2,
   },
   menuItem: {
-    minHeight: 48,
+    minHeight: 44,
     flexShrink: 0,
     flexDirection: 'row',
-    paddingHorizontal: 0,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  activeMenuItem: {
-    marginHorizontal: 5,
-    paddingHorizontal: 0,
-    borderRadius: 10,
   },
   iconContent: {
     width: 40,
@@ -68,7 +60,7 @@ const Header = () => {
   return (
     <View style={{ paddingTop: statusBarHeight }}>
       <View style={styles.header}>
-        <Icon name="logo" color={theme['c-primary-dark-100-alpha-300']} size={32} />
+        <Icon name="logo" color={theme['c-primary']} size={30} />
         <Text style={styles.headerText} size={12} color={theme['c-font']}>Music</Text>
       </View>
     </View>
@@ -86,21 +78,16 @@ const MenuItem = ({ id, icon, onPress }: {
   const theme = useTheme()
   const active = activeId == id
 
-  return active
-    ? <View style={{ ...styles.menuItem, ...styles.activeMenuItem, backgroundColor: theme['c-primary'] }}>
-        <View style={styles.iconContent}>
-          <Icon name={icon} size={22} color={theme['c-primary-font-active']} />
-        </View>
+  return (
+    <TouchableOpacity style={styles.menuItem} onPress={() => { onPress(id) }} activeOpacity={0.7}>
+      <View style={styles.iconContent}>
+        <Icon name={icon} size={22} color={active ? theme['c-primary'] : theme['c-font-label']} />
       </View>
-    : <TouchableOpacity style={styles.menuItem} onPress={() => { onPress(id) }}>
-        <View style={styles.iconContent}>
-          <Icon name={icon} size={22} color={theme['c-font-label']} />
-        </View>
-      </TouchableOpacity>
+    </TouchableOpacity>
+  )
 }
 
 export default memo(() => {
-  const theme = useTheme()
   const showBackBtn = useSettingValue('common.showBackBtn')
 
   const handlePress = (id: IdType) => {
@@ -115,7 +102,7 @@ export default memo(() => {
   }
 
   return (
-    <View style={{ ...styles.container, borderRightColor: theme['c-border-background'] }}>
+    <View style={styles.container}>
       <Header />
       <View style={styles.menus}>
         <View style={styles.list}>
