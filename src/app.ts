@@ -35,7 +35,8 @@ void Promise.all([
       width: Math.round(window.width),
       height: Math.round(window.height) + (StatusBar.currentHeight ?? 0),
     }
-    windowSizeTools.setWindowSize(size.width, size.height)
+    // Assign the size directly; avoid invoking optional methods during bootstrap.
+    windowSizeTools.size = size
     return size
   }),
 ]).then(async([fontSize]) => {
