@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { ScrollView, TouchableOpacity, View } from 'react-native'
+import { TouchableOpacity, View } from 'react-native'
 import { useNavActiveId, useStatusbarHeight } from '@/store/common/hook'
 import { useTheme } from '@/store/theme/hook'
 import { Icon } from '@/components/common/Icon'
@@ -11,18 +11,19 @@ import { setNavActiveId } from '@/core/common'
 import { BorderWidths } from '@/theme'
 import { useSettingValue } from '@/store/setting/hook'
 
-const NAV_WIDTH = 88
+const NAV_WIDTH = 64
 
 const styles = createStyle({
   container: {
     flexGrow: 0,
+    flexShrink: 0,
     borderRightWidth: BorderWidths.normal,
-    paddingBottom: 10,
+    paddingBottom: 8,
     width: NAV_WIDTH,
   },
   header: {
     paddingTop: 18,
-    paddingBottom: 20,
+    paddingBottom: 18,
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
@@ -33,30 +34,31 @@ const styles = createStyle({
   },
   menus: {
     flex: 1,
+    minHeight: 0,
+    justifyContent: 'center',
   },
   list: {
-    paddingTop: 8,
-    paddingBottom: 15,
+    flex: 1,
+    justifyContent: 'space-evenly',
+    paddingTop: 4,
+    paddingBottom: 4,
   },
   menuItem: {
-    minHeight: 58,
+    minHeight: 48,
+    flexShrink: 0,
     flexDirection: 'row',
     paddingHorizontal: 0,
     justifyContent: 'center',
     alignItems: 'center',
   },
   activeMenuItem: {
-    marginHorizontal: 7,
+    marginHorizontal: 5,
     paddingHorizontal: 0,
-    borderRadius: 12,
+    borderRadius: 10,
   },
   iconContent: {
     width: 40,
     alignItems: 'center',
-  },
-  text: {
-    paddingLeft: 0,
-    flexShrink: 1,
   },
 })
 
@@ -66,8 +68,8 @@ const Header = () => {
   return (
     <View style={{ paddingTop: statusBarHeight }}>
       <View style={styles.header}>
-        <Icon name="logo" color={theme['c-primary-dark-100-alpha-300']} size={34} />
-        <Text style={styles.headerText} size={13} color={theme['c-font']}>Music</Text>
+        <Icon name="logo" color={theme['c-primary-dark-100-alpha-300']} size={32} />
+        <Text style={styles.headerText} size={12} color={theme['c-font']}>Music</Text>
       </View>
     </View>
   )
@@ -89,13 +91,11 @@ const MenuItem = ({ id, icon, onPress }: {
         <View style={styles.iconContent}>
           <Icon name={icon} size={22} color={theme['c-primary-font-active']} />
         </View>
-
       </View>
     : <TouchableOpacity style={styles.menuItem} onPress={() => { onPress(id) }}>
         <View style={styles.iconContent}>
           <Icon name={icon} size={22} color={theme['c-font-label']} />
         </View>
-
       </TouchableOpacity>
 }
 
@@ -117,11 +117,11 @@ export default memo(() => {
   return (
     <View style={{ ...styles.container, borderRightColor: theme['c-border-background'] }}>
       <Header />
-      <ScrollView style={styles.menus}>
+      <View style={styles.menus}>
         <View style={styles.list}>
           {NAV_MENUS.map(menu => <MenuItem key={menu.id} id={menu.id} icon={menu.icon} onPress={handlePress} />)}
         </View>
-      </ScrollView>
+      </View>
       {
         showBackBtn ? <MenuItem id="back_home" icon="home" onPress={handlePress} /> : null
       }
