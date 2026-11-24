@@ -4,12 +4,13 @@ import { MUSIC_TOGGLE_MODE_LIST, MUSIC_TOGGLE_MODE } from '@/config/constant'
 import { useSettingValue } from '@/store/setting/hook'
 import { useI18n } from '@/lang'
 import { updateSetting } from '@/core/common'
+import { useTheme } from '@/store/theme/hook'
 import Btn from './Btn'
-
 
 export default memo(() => {
   const togglePlayMethod = useSettingValue('player.togglePlayMethod')
   const t = useI18n()
+  const theme = useTheme()
 
   const toggleNextPlayMode = () => {
     let index = MUSIC_TOGGLE_MODE_LIST.indexOf(togglePlayMethod)
@@ -59,5 +60,5 @@ export default memo(() => {
     return playModeIcon
   }, [togglePlayMethod])
 
-  return <Btn icon={playModeIcon} onPress={toggleNextPlayMode} />
+  return <Btn icon={playModeIcon} color={theme['c-button-font']} onPress={toggleNextPlayMode} />
 })
