@@ -7,10 +7,7 @@ import { updateSetting } from '@/core/common'
 import { useTheme } from '@/store/theme/hook'
 import Btn from './Btn'
 
-const CONTROL_BUTTON_SIZE = 46
-const CONTROL_ICON_SIZE = 26
-
-export default memo(() => {
+export default memo(({ size }: { size: number }) => {
   const togglePlayMethod = useSettingValue('player.togglePlayMethod')
   const t = useI18n()
   const theme = useTheme()
@@ -63,5 +60,5 @@ export default memo(() => {
     return playModeIcon
   }, [togglePlayMethod])
 
-  return <Btn icon={playModeIcon} color={theme['c-button-font']} onPress={toggleNextPlayMode} buttonSize={CONTROL_BUTTON_SIZE} iconSize={CONTROL_ICON_SIZE} />
+  return <Btn icon={playModeIcon} color={theme['c-button-font']} onPress={toggleNextPlayMode} buttonSize={size} iconSize={size * 0.7} />
 })
