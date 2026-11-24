@@ -44,8 +44,8 @@ export default ({ item, activeId, index, longPressIndex, onBoundChange, onShowMe
         borderColor: focused ? theme['c-primary-font-active'] : 'transparent',
       }}
       key={item.id}
-      onFocus={() => setFocused(true)}
-      onBlur={() => setFocused(false)}
+      onFocus={() => { setFocused(true) }}
+      onBlur={() => { setFocused(false) }}
       onLongPress={setPosition}
       onPress={() => { onBoundChange(item) }}
     >
