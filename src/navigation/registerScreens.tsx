@@ -11,6 +11,7 @@ import {
   SYNC_MODE_MODAL,
 } from './screenNames'
 import SyncModeModal from './components/SyncModeModal'
+import { Home, PlayDetail, SonglistDetail, Comment } from '@/screens'
 
 function WrappedComponent(Component: any) {
   return function inject(props: Record<string, any>) {
@@ -27,15 +28,6 @@ function WrappedComponent(Component: any) {
 }
 
 export default () => {
-  // Resolve application screens only when registration runs. Home imports
-  // navigation, while navigation imports this module; a top-level screens
-  // import creates a circular dependency and can leave the screens namespace
-  // undefined during module initialization.
-  // Use a relative Metro-resolvable path for the deferred module load.
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const screens = require('../screens')
-  const { Home, PlayDetail, SonglistDetail, Comment } = screens
-
   Navigation.registerComponent(HOME_SCREEN, () => WrappedComponent(Home))
   Navigation.registerComponent(PLAY_DETAIL_SCREEN, () => WrappedComponent(PlayDetail))
   Navigation.registerComponent(SONGLIST_DETAIL_SCREEN, () => WrappedComponent(SonglistDetail))
