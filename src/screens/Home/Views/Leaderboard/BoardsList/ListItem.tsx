@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import Text from '@/components/common/Text'
 import { useTheme } from '@/store/theme/hook'
 import Button, { type BtnType } from '@/components/common/Button'
@@ -6,11 +6,6 @@ import { createStyle } from '@/utils/tools'
 import { type BoardItem } from '@/store/leaderboard/state'
 import { Icon } from '@/components/common/Icon'
 
-// index={index}
-// longPressIndex={longPressIndex}
-// activeId={activeId}
-// showMenu={showMenu}
-// onBoundChange={handleBoundChange}
 export interface ListItemProps {
   item: BoardItem
   index: number
@@ -23,31 +18,43 @@ export interface ListItemProps {
 export default ({ item, activeId, index, longPressIndex, onBoundChange, onShowMenu }: ListItemProps) => {
   const theme = useTheme()
   const buttonRef = useRef<BtnType>(null)
+  const [focused, setFocused] = useState(false)
 
   const setPosition = useCallback(() => {
     if (buttonRef.current?.measure) {
       buttonRef.current.measure((fx, fy, width, height, px, py) => {
-        // console.log(fx, fy, width, height, px, py)
         onShowMenu(item.id, item.name, index, { x: Math.ceil(px), y: Math.ceil(py), w: Math.ceil(width), h: Math.ceil(height) })
       })
     }
   }, [index, item, onShowMenu])
 
   const active = activeId == item.id
+  const highlighted = focused || active
 
   return (
     <Button
       ref={buttonRef}
-      style={{ ...styles.button, backgroundColor: index == longPressIndex ? theme['c-button-background-active'] : undefined }}
-      key={item.id} onLongPress={setPosition}
+      focusable
+      style={{
+        ...styles.button,
+        backgroundColor: focused
+          ? theme['c-button-background-active']
+          : index == longPressIndex ? theme['c-button-background-active'] : undefined,
+        borderWidth: 2,
+        borderColor: focused ? theme['c-primary-font-active'] : 'transparent',
+      }}
+      key={item.id}
+      onFocus={() => setFocused(true)}
+      onBlur={() => setFocused(false)}
+      onLongPress={setPosition}
       onPress={() => { onBoundChange(item) }}
     >
       {
         active
-          ? <Icon style={styles.listActiveIcon} name="chevron-right" size={12} color={theme['c-primary-font']} />
+          ? <Icon style={styles.listActiveIcon} name="chevron-right" size={12} color={theme['c-primary-font-active']} />
           : null
       }
-      <Text style={styles.listName} size={14} textBreakStrategy="simple" color={active ? theme['c-primary-font-active'] : theme['c-font']} numberOfLines={1}>{item.name}</Text>
+      <Text style={styles.listName} size={14} textBreakStrategy="simple" color={highlighted ? theme['c-primary-font-active'] : theme['c-font']} numberOfLines={1}>{item.name}</Text>
     </Button>
   )
 }
@@ -60,17 +67,15 @@ const styles = createStyle({
     paddingBottom: 10,
     flexDirection: 'row',
     alignItems: 'center',
+    borderRadius: 6,
   },
   listActiveIcon: {
-    // width: 18,
     marginLeft: 3,
-    // paddingRight: 5,
     textAlign: 'center',
   },
   listName: {
     height: '100%',
     justifyContent: 'center',
     paddingLeft: 6,
-    // backgroundColor: 'rgba(0,0,0,0.1)',
   },
 })
