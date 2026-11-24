@@ -29,13 +29,18 @@ void Promise.all([getFontSize(), windowSizeTools.init()]).then(async([fontSize])
   const handleInit = async() => {
     if (isInited) return
     void initLog()
-    const { default: init } = await import('@/core/init')
+    let initStage = 'Loading core initializer'
     try {
+      bootLog(initStage)
+      const { default: init } = await import('@/core/init')
+      initStage = 'Running core initializer'
+      bootLog('Core initializer module loaded.')
       handlePushedHomeScreen = await init()
+      bootLog('Core initializer completed.')
     } catch (err: any) {
       void tipDialog({
-        title: '初始化失败 (Init Failed)',
-        message: `Boot Log:\n${tryGetBootLog()}\n\n${(err.stack ?? err.message) as string}`,
+        title: '初始化失敗 (Init Failed)',
+        message: `Stage: ${initStage}\n\nBoot Log:\n${tryGetBootLog()}\n\n${(err?.stack ?? err?.message ?? String(err)) as string}`,
         btnText: 'Exit',
         bgClose: false,
       }).then(() => {
