@@ -75,7 +75,7 @@ export default () => {
       <PrevBtn size={size} />
       <TogglePlayBtn size={size}/>
       <NextBtn size={size} />
-      <PlayModeBtn />
+      <PlayModeBtn size={size} />
     </View>
   )
 }
