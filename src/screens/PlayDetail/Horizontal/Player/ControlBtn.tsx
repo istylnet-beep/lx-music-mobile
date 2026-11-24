@@ -7,6 +7,7 @@ import { useIsPlay } from '@/store/player/hook'
 import { useLayout } from '@/utils/hooks'
 import { marginLeft } from '../constant'
 import { BTN_WIDTH } from '../MoreBtn/Btn'
+import PlayModeBtn from '../MoreBtn/PlayModeBtn'
 
 const PrevBtn = ({ size }: { size: number }) => {
   const theme = useTheme()
@@ -74,6 +75,7 @@ export default () => {
       <PrevBtn size={size} />
       <TogglePlayBtn size={size}/>
       <NextBtn size={size} />
+      <PlayModeBtn />
     </View>
   )
 }
