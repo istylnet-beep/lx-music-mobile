@@ -37,11 +37,13 @@ export default ({ item, activeId, index, longPressIndex, onBoundChange, onShowMe
       focusable
       style={{
         ...styles.button,
-        backgroundColor: focused
-          ? theme['c-button-background-active']
-          : index == longPressIndex ? theme['c-button-background-active'] : undefined,
-        borderWidth: 2,
-        borderColor: focused ? theme['c-primary-font-active'] : 'transparent',
+        backgroundColor: active
+          ? '#102B38'
+          : focused || index == longPressIndex ? theme['c-button-background-active'] : 'transparent',
+        borderWidth: active || focused ? 1.5 : 1,
+        borderColor: active
+          ? '#28C8F5'
+          : focused ? theme['c-primary-font-active'] : 'transparent',
       }}
       key={item.id}
       onFocus={() => { setFocused(true) }}
@@ -54,7 +56,7 @@ export default ({ item, activeId, index, longPressIndex, onBoundChange, onShowMe
           ? <Icon style={styles.listActiveIcon} name="chevron-right" size={12} color={theme['c-primary-font-active']} />
           : null
       }
-      <Text style={styles.listName} size={14} textBreakStrategy="simple" color={highlighted ? theme['c-primary-font-active'] : theme['c-font']} numberOfLines={1}>{item.name}</Text>
+      <Text style={styles.listName} size={14} textBreakStrategy="simple" color={active || focused ? '#63D9FF' : '#D8EAF2'} numberOfLines={1}>{item.name}</Text>
     </Button>
   )
 }
