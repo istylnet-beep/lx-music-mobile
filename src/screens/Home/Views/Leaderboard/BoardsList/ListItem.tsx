@@ -29,6 +29,7 @@ export default ({ item, activeId, index, longPressIndex, onBoundChange, onShowMe
   }, [index, item, onShowMenu])
 
   const active = activeId == item.id
+  const highlighted = active || focused || index == longPressIndex
 
   return (
     <Button
@@ -37,12 +38,9 @@ export default ({ item, activeId, index, longPressIndex, onBoundChange, onShowMe
       style={{
         ...styles.button,
         backgroundColor: active
-          ? '#102B38'
-          : focused || index == longPressIndex ? theme['c-button-background-active'] : 'transparent',
-        borderWidth: active || focused ? 1.5 : 1,
-        borderColor: active
-          ? '#28C8F5'
-          : focused ? theme['c-primary-font-active'] : 'transparent',
+          ? theme['c-primary-alpha-200']
+          : focused || index == longPressIndex ? theme['c-primary-alpha-100'] : 'transparent',
+        borderWidth: 0,
       }}
       key={item.id}
       onFocus={() => { setFocused(true) }}
@@ -52,10 +50,10 @@ export default ({ item, activeId, index, longPressIndex, onBoundChange, onShowMe
     >
       {
         active
-          ? <Icon style={styles.listActiveIcon} name="chevron-right" size={12} color={theme['c-primary-font-active']} />
+          ? <Icon style={styles.listActiveIcon} name="chevron-right" size={12} color={theme['c-primary']} />
           : null
       }
-      <Text style={styles.listName} size={14} textBreakStrategy="simple" color={active || focused ? '#63D9FF' : '#D8EAF2'} numberOfLines={1}>{item.name}</Text>
+      <Text style={styles.listName} size={14} textBreakStrategy="simple" color={highlighted ? theme['c-primary'] : theme['c-font-label']} numberOfLines={1}>{item.name}</Text>
     </Button>
   )
 }
