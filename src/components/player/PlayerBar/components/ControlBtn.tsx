@@ -6,7 +6,7 @@ import { playNext, playPrev, togglePlay } from '@/core/player/player'
 import { createStyle } from '@/utils/tools'
 import { useHorizontalMode } from '@/utils/hooks'
 
-const BTN_SIZE = 24
+const BTN_SIZE = 26
 const handlePlayPrev = () => {
   void playPrev()
 }
