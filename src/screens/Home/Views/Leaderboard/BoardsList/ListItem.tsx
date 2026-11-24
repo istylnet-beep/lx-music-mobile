@@ -29,7 +29,6 @@ export default ({ item, activeId, index, longPressIndex, onBoundChange, onShowMe
   }, [index, item, onShowMenu])
 
   const active = activeId == item.id
-  const highlighted = focused || active
 
   return (
     <Button
