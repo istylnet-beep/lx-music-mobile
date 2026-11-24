@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity } from 'react-native'
+import { TouchableOpacity } from 'react-native'
 import { navigations } from '@/navigation'
 import { usePlayerMusicInfo } from '@/store/player/hook'
 import { scaleSizeH } from '@/utils/pixelRatio'
@@ -11,14 +11,6 @@ import { useCallback } from 'react'
 import { setLoadErrorPicUrl, setMusicInfo } from '@/core/player/playInfo'
 
 const PIC_HEIGHT = scaleSizeH(46)
-
-const styles = StyleSheet.create({
-  image: {
-    width: picSize,
-    height: picSize,
-    borderRadius: 2,
-  },
-})
 
 export default ({ isHome }: { isHome: boolean }) => {
   const musicInfo = usePlayerMusicInfo()
@@ -49,7 +41,7 @@ export default ({ isHome }: { isHome: boolean }) => {
 
   return (
     <TouchableOpacity onLongPress={handleLongPress} onPress={handlePress} activeOpacity={0.7} >
-      <Image url={musicInfo.pic} nativeID={NAV_SHEAR_NATIVE_IDS.playDetail_pic} style={styles.image} onError={handleError} />
+      <Image url={musicInfo.pic} nativeID={NAV_SHEAR_NATIVE_IDS.playDetail_pic} style={{ width: picSize, height: picSize, borderRadius: 8 }} onError={handleError} />
     </TouchableOpacity>
   )
 }
