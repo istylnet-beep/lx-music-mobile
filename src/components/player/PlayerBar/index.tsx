@@ -61,8 +61,8 @@ const styles = createStyle({
   homeContainer: {
     width: 320,
     height: '100%',
-    paddingVertical: 22,
-    paddingHorizontal: 18,
+    paddingVertical: 28,
+    paddingHorizontal: 20,
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0,
     borderRightWidth: 1,
@@ -75,10 +75,12 @@ const styles = createStyle({
     paddingLeft: 0,
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: 24,
   },
   homeRight: {
     width: '100%',
     padding: 0,
+    marginTop: 20,
     justifyContent: 'center',
   },
   left: {
