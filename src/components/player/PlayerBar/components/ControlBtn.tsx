@@ -5,7 +5,6 @@ import { useTheme } from '@/store/theme/hook'
 import { playNext, playPrev, togglePlay } from '@/core/player/player'
 import { createStyle } from '@/utils/tools'
 import { useHorizontalMode } from '@/utils/hooks'
-import PlayModeBtn from '@/screens/PlayDetail/Horizontal/MoreBtn/PlayModeBtn'
 
 const BTN_SIZE = 26
 const handlePlayPrev = () => {
@@ -50,7 +49,6 @@ export default () => {
       { isHorizontalMode ? <PlayPrevBtn /> : null }
       <TogglePlayBtn />
       <PlayNextBtn />
-      { isHorizontalMode ? <PlayModeBtn /> : null }
     </>
   )
 }
