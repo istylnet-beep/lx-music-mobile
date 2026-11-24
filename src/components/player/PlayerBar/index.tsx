@@ -59,7 +59,7 @@ const styles = createStyle({
     elevation: 10,
   },
   homeContainer: {
-    width: 300,
+    width: 320,
     height: '100%',
     paddingVertical: 22,
     paddingHorizontal: 18,
