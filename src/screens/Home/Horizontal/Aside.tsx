@@ -10,9 +10,8 @@ import type { InitState } from '@/store/common/state'
 import { setNavActiveId } from '@/core/common'
 import { BorderWidths } from '@/theme'
 import { useSettingValue } from '@/store/setting/hook'
-import { useI18n } from '@/lang'
 
-const NAV_WIDTH = 190
+const NAV_WIDTH = 88
 
 const styles = createStyle({
   container: {
@@ -23,14 +22,13 @@ const styles = createStyle({
   },
   header: {
     paddingTop: 18,
-    paddingBottom: 22,
-    paddingLeft: 20,
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
+    paddingBottom: 20,
+    flexDirection: 'column',
+    justifyContent: 'center',
     alignItems: 'center',
   },
   headerText: {
-    marginLeft: 10,
+    marginTop: 3,
     fontWeight: '600',
   },
   menus: {
@@ -41,23 +39,23 @@ const styles = createStyle({
     paddingBottom: 15,
   },
   menuItem: {
-    minHeight: 54,
+    minHeight: 58,
     flexDirection: 'row',
-    paddingHorizontal: 18,
-    justifyContent: 'flex-start',
+    paddingHorizontal: 0,
+    justifyContent: 'center',
     alignItems: 'center',
   },
   activeMenuItem: {
-    marginHorizontal: 8,
-    paddingHorizontal: 10,
+    marginHorizontal: 7,
+    paddingHorizontal: 0,
     borderRadius: 12,
   },
   iconContent: {
-    width: 30,
+    width: 40,
     alignItems: 'center',
   },
   text: {
-    paddingLeft: 12,
+    paddingLeft: 0,
     flexShrink: 1,
   },
 })
@@ -68,8 +66,8 @@ const Header = () => {
   return (
     <View style={{ paddingTop: statusBarHeight }}>
       <View style={styles.header}>
-        <Icon name="logo" color={theme['c-primary-dark-100-alpha-300']} size={28} />
-        <Text style={styles.headerText} size={18} color={theme['c-font']}>LX Music TV</Text>
+        <Icon name="logo" color={theme['c-primary-dark-100-alpha-300']} size={34} />
+        <Text style={styles.headerText} size={13} color={theme['c-font']}>Music</Text>
       </View>
     </View>
   )
@@ -84,7 +82,6 @@ const MenuItem = ({ id, icon, onPress }: {
 }) => {
   const activeId = useNavActiveId()
   const theme = useTheme()
-  const t = useI18n()
   const active = activeId == id
 
   return active
@@ -92,13 +89,13 @@ const MenuItem = ({ id, icon, onPress }: {
         <View style={styles.iconContent}>
           <Icon name={icon} size={22} color={theme['c-primary-font-active']} />
         </View>
-        <Text style={styles.text} size={16} color={theme['c-primary-font-active']} style={{ fontWeight: '600' }}>{t(id)}</Text>
+        
       </View>
     : <TouchableOpacity style={styles.menuItem} onPress={() => { onPress(id) }}>
         <View style={styles.iconContent}>
           <Icon name={icon} size={22} color={theme['c-font-label']} />
         </View>
-        <Text style={styles.text} size={16} color={theme['c-font']}>{id === 'back_home' ? t('back_home') : t(id)}</Text>
+        
       </TouchableOpacity>
 }
 
