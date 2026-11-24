@@ -78,12 +78,14 @@ export const updateSetting = (setting?: Partial<LX.AppSetting> | null, isInit: b
 
 export const initSetting = async() => {
   let setting: Partial<LX.AppSetting> | null = await getData(storageDataPrefix.setting)
+  let isFirstInstall = setting == null
 
 
   // try migrate setting before v1
   if (!setting) {
     const config = await getData<{ setting?: any }>(storageDataPrefixOld.setting)
     if (config != null) {
+      isFirstInstall = false
       setting = migrateSetting(config)
       try {
         await migrateListData()
@@ -102,6 +104,8 @@ export const initSetting = async() => {
       await removeData(storageDataPrefixOld.setting)
     }
   }
+
+  if (isFirstInstall) await saveData(storageDataPrefix.firstInstallPending, true)
 
   // console.log(setting)
   const updatedSetting = updateSetting(setting, true)

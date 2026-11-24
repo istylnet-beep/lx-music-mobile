@@ -2,10 +2,8 @@ const fs = require('fs')
 const { jp, formatTime } = require('./index')
 const pkgDir = '../../package.json'
 const pkg = require(pkgDir)
-const version = require('../version.json')
 const chalk = require('chalk')
 const pkg_bak = JSON.stringify(pkg, null, 2)
-const version_bak = JSON.stringify(version, null, 2)
 const changelogPath = jp('../../CHANGELOG.md')
 const { parseChangelog } = require('./parseChangelog')
 
@@ -25,18 +23,10 @@ const updateChangeLog = async(newVerNum, newChangeLog) => {
 module.exports = async newVerNum => {
   if (!newVerNum) newVerNum = pkg.version
   const newMDChangeLog = fs.readFileSync(jp('../changeLog.md'), 'utf-8')
-  version.history.unshift({
-    version: version.version,
-    desc: version.desc,
-  })
-  version.version = newVerNum
-  version.desc = newMDChangeLog.replace(/(?:^|(\n))#{1,6} (.+)\n/g, '$1$2').trim()
   pkg.version = newVerNum
   pkg.versionCode = pkg.versionCode + 1
 
   console.log(chalk.blue('new version: ') + chalk.green(newVerNum))
-
-  fs.writeFileSync(jp('../version.json'), JSON.stringify(version) + '\n', 'utf-8')
 
   fs.writeFileSync(jp(pkgDir), JSON.stringify(pkg, null, 2) + '\n', 'utf-8')
 
@@ -44,7 +34,6 @@ module.exports = async newVerNum => {
 
   return {
     pkg_bak,
-    version_bak,
   }
 }
 

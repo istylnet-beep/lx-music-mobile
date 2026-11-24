@@ -56,7 +56,4 @@ const styles = createStyle({
     flexDirection: 'row',
     // borderTopWidth: BorderWidths.normal,
   },
-  content: {
-    flex: 1,
-  },
 })

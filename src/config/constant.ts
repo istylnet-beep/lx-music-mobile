@@ -39,6 +39,12 @@ export enum NAV_SHEAR_NATIVE_IDS {
 
 export const storageDataPrefix = {
   setting: '@setting_v1',
+  firstInstallPending: '@first_install_pending',
+  yehuaDefaultSourceInitialized: '@yehua_default_source_initialized',
+  yehuaDefaultSourceMigrationV2: '@yehua_default_source_migration_v2',
+  yehuaDefaultSourceMigrationV3: '@yehua_default_source_migration_v3',
+  yehuaDefaultSourceMigrationV4: '@yehua_default_source_migration_v4',
+  yehuaDefaultSourceMigrationV5: '@yehua_default_source_migration_v5',
   userList: '@user_list',
   viewPrevState: '@view_prev_state',
 
@@ -62,8 +68,6 @@ export const storageDataPrefix = {
 
   searchHistoryList: '@search_history_list',
   listUpdateInfo: '@list_update_info',
-  ignoreVersion: '@ignore_version',
-  ignoreVersionFailTipTimeKey: '@ignore_version_fail_tip_time',
   leaderboardSetting: '@leaderboard_setting',
   songListSetting: '@songist_setting',
   searchSetting: '@search_setting',

@@ -1,35 +1,49 @@
+import { useState } from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { Icon } from '@/components/common/Icon'
 import { useTheme } from '@/store/theme/hook'
-// import { useIsPlay } from '@/store/player/hook'
 import { playNext, playPrev, togglePlay } from '@/core/player/player'
-// import { scaleSizeW } from '@/utils/pixelRatio'
 import { useIsPlay } from '@/store/player/hook'
 import { useLayout } from '@/utils/hooks'
 import { marginLeft } from '../constant'
 import { BTN_WIDTH } from '../MoreBtn/Btn'
-
-// const WIDTH = scaleSizeW(48)
+import PlayModeBtn from '../MoreBtn/PlayModeBtn'
 
 const PrevBtn = ({ size }: { size: number }) => {
   const theme = useTheme()
+  const [focused, setFocused] = useState(false)
   const handlePlayPrev = () => {
     void playPrev()
   }
   return (
-    <TouchableOpacity style={{ ...styles.cotrolBtn, width: size, height: size }} activeOpacity={0.5} onPress={handlePlayPrev}>
-      <Icon name='prevMusic' color={theme['c-button-font']} rawSize={size * 0.7} />
+    <TouchableOpacity
+      focusable
+      style={[styles.cotrolBtn, { width: size, height: size }, focused && styles.focusedBtn]}
+      activeOpacity={0.8}
+      onFocus={() => { setFocused(true) }}
+      onBlur={() => { setFocused(false) }}
+      onPress={handlePlayPrev}
+    >
+      <Icon name='prevMusic' color={focused ? theme['c-primary-font-active'] : theme['c-button-font']} rawSize={size * 0.7} />
     </TouchableOpacity>
   )
 }
 const NextBtn = ({ size }: { size: number }) => {
   const theme = useTheme()
+  const [focused, setFocused] = useState(false)
   const handlePlayNext = () => {
     void playNext()
   }
   return (
-    <TouchableOpacity style={{ ...styles.cotrolBtn, width: size, height: size }} activeOpacity={0.5} onPress={handlePlayNext}>
-      <Icon name='nextMusic' color={theme['c-button-font']} rawSize={size * 0.7} />
+    <TouchableOpacity
+      focusable
+      style={[styles.cotrolBtn, { width: size, height: size }, focused && styles.focusedBtn]}
+      activeOpacity={0.8}
+      onFocus={() => { setFocused(true) }}
+      onBlur={() => { setFocused(false) }}
+      onPress={handlePlayNext}
+    >
+      <Icon name='nextMusic' color={focused ? theme['c-primary-font-active'] : theme['c-button-font']} rawSize={size * 0.7} />
     </TouchableOpacity>
   )
 }
@@ -37,9 +51,17 @@ const NextBtn = ({ size }: { size: number }) => {
 const TogglePlayBtn = ({ size }: { size: number }) => {
   const theme = useTheme()
   const isPlay = useIsPlay()
+  const [focused, setFocused] = useState(false)
   return (
-    <TouchableOpacity style={{ ...styles.cotrolBtn, width: size, height: size }} activeOpacity={0.5} onPress={togglePlay}>
-      <Icon name={isPlay ? 'pause' : 'play'} color={theme['c-button-font']} rawSize={size * 0.7} />
+    <TouchableOpacity
+      focusable
+      style={[styles.cotrolBtn, { width: size, height: size }, focused && styles.focusedBtn]}
+      activeOpacity={0.8}
+      onFocus={() => { setFocused(true) }}
+      onBlur={() => { setFocused(false) }}
+      onPress={togglePlay}
+    >
+      <Icon name={isPlay ? 'pause' : 'play'} color={focused ? theme['c-primary-font-active'] : theme['c-button-font']} rawSize={size * 0.7} />
     </TouchableOpacity>
   )
 }
@@ -53,29 +75,29 @@ export default () => {
       <PrevBtn size={size} />
       <TogglePlayBtn size={size}/>
       <NextBtn size={size} />
+      <PlayModeBtn size={size} />
     </View>
   )
 }
-
 
 const styles = StyleSheet.create({
   content: {
     flexGrow: 1,
     flexShrink: 1,
     flexDirection: 'row',
-    // paddingVertical: 8,
     gap: 22,
-    // backgroundColor: 'rgba(0,0,0,0.1)',
     alignItems: 'center',
     justifyContent: 'center',
   },
   cotrolBtn: {
     justifyContent: 'center',
     alignItems: 'center',
-
-    // backgroundColor: '#ccc',
-    shadowOpacity: 1,
-    textShadowRadius: 1,
-    // marginLeft: 10,
+    borderRadius: 999,
+    borderWidth: 2,
+    borderColor: 'transparent',
+  },
+  focusedBtn: {
+    borderColor: '#36C8E8',
+    backgroundColor: 'rgba(54, 200, 232, 0.16)',
   },
 })

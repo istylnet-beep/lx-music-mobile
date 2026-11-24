@@ -3,18 +3,14 @@ import { View } from 'react-native'
 
 import SourceSelector, {
   type SourceSelectorType as _SourceSelectorType,
-  // type SourceSelectorProps as _SourceSelectorProps,
 } from '@/components/SourceSelector'
 import BoardsList, { type BoardsListType, type BoardsListProps } from '../BoardsList'
-import { BorderWidths } from '@/theme'
 import { createStyle } from '@/utils/tools'
 import { handleCollect, handlePlay } from '../listAction'
 import boardState, { type InitState } from '@/store/leaderboard/state'
-import { useTheme } from '@/store/theme/hook'
 import { getBoardsList } from '@/core/leaderboard'
 
 type Sources = Readonly<InitState['sources']>
-// type SourceSelectorProps = _SourceSelectorProps<Sources>
 type SourceSelectorType = _SourceSelectorType<Sources>
 
 export interface LeftBarProps {
@@ -26,7 +22,6 @@ export interface LeftBarType {
 }
 
 export default forwardRef<LeftBarType, LeftBarProps>(({ onChangeList }, ref) => {
-  const theme = useTheme()
   const sourceSelectorRef = useRef<SourceSelectorType>(null)
   const boardsListRef = useRef<BoardsListType>(null)
   const boundInfo = useRef<{ source: LX.OnlineSource, id: string | null }>({ source: 'kw', id: null })
@@ -39,7 +34,6 @@ export default forwardRef<LeftBarType, LeftBarProps>(({ onChangeList }, ref) => 
       })
     },
   }), [])
-
 
   const onSourceChange = (source: LX.OnlineSource) => {
     boundInfo.current.source = source
@@ -67,7 +61,7 @@ export default forwardRef<LeftBarType, LeftBarProps>(({ onChangeList }, ref) => 
   }
 
   return (
-    <View style={{ ...styles.container, borderRightColor: theme['c-list-header-border-bottom'] }}>
+    <View style={styles.container}>
       <View style={styles.selector}>
         <SourceSelector ref={sourceSelectorRef} onSourceChange={onSourceChange} />
       </View>
@@ -84,15 +78,13 @@ export default forwardRef<LeftBarType, LeftBarProps>(({ onChangeList }, ref) => 
 const styles = createStyle({
   container: {
     flexDirection: 'column',
-    width: '26%',
-    maxWidth: 180,
-    minWidth: 110,
+    width: '23%',
+    maxWidth: 250,
+    minWidth: 180,
     flexGrow: 0,
     flexShrink: 0,
-    borderRightWidth: BorderWidths.normal,
   },
   selector: {
-    height: 38,
+    height: 48,
   },
 })
-

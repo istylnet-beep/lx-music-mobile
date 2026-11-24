@@ -13,14 +13,14 @@ const langs = [
     locale: 'zh_cn',
     // alternate: 'zh-hans',
     country: 'cn',
-    fallback: true,
     message: zh_cn,
   },
   {
     name: '繁體中文',
     locale: 'zh_tw',
     // alternate: 'zh-hant',
-    country: 'cn',
+    country: 'tw',
+    fallback: true,
     message: zh_tw,
   },
   {

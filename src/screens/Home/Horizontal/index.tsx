@@ -23,10 +23,10 @@ export default () => {
       <StatusBar />
       <View style={styles.container}>
         <Aside />
+        <PlayerBar isHome />
         <View style={styles.content}>
           <Header />
           <Main />
-          <PlayerBar isHome />
         </View>
       </View>
     </>

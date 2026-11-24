@@ -7,59 +7,65 @@ import Title from './components/Title'
 import PlayInfo from './components/PlayInfo'
 import ControlBtn from './components/ControlBtn'
 import { createStyle } from '@/utils/tools'
-// import { useSettingValue } from '@/store/setting/hook'
 import { useTheme } from '@/store/theme/hook'
 import { useSettingValue } from '@/store/setting/hook'
 
-
 export default memo(({ isHome = false }: { isHome?: boolean }) => {
-  // const { onLayout, ...layout } = useLayout()
   const { keyboardShown } = useKeyboard()
   const theme = useTheme()
   const autoHidePlayBar = useSettingValue('common.autoHidePlayBar')
 
   const playerComponent = useMemo(() => (
-    <View style={{ ...styles.container, backgroundColor: theme['c-content-background'] }}>
+    <View style={{ ...styles.container, ...(isHome ? styles.homeContainer : null), backgroundColor: theme['c-content-background'] }}>
       <Pic isHome={isHome} />
-      <View style={styles.center}>
+      <View style={{ ...styles.center, ...(isHome ? styles.homeCenter : null) }}>
         <Title isHome={isHome} />
-        {/* <View style={{ ...styles.row, justifyContent: 'space-between' }}>
-          <PlayTime />
-        </View> */}
         <PlayInfo isHome={isHome} />
       </View>
-      <View style={styles.right}>
+      <View style={{ ...styles.right, ...(isHome ? styles.homeRight : null) }}>
         <ControlBtn />
       </View>
     </View>
   ), [theme, isHome])
 
-  // console.log('render pb')
-
   return autoHidePlayBar && keyboardShown ? null : playerComponent
 })
-
 
 const styles = createStyle({
   container: {
     width: '100%',
-    // height: 100,
-    // paddingTop: progressContentPadding,
-    // marginTop: -progressContentPadding,
-    // backgroundColor: 'rgba(0, 0, 0, .1)',
-    // borderTopWidth: BorderWidths.normal2,
     paddingVertical: 5,
     paddingLeft: 5,
-    // backgroundColor: AppColors.primary,
-    // backgroundColor: 'red',
     borderTopLeftRadius: 6,
     borderTopRightRadius: 6,
     flexDirection: 'row',
     alignItems: 'center',
-    elevation: 10,
+  },
+  homeContainer: {
+    width: 210,
+    height: '100%',
+    paddingVertical: 18,
+    paddingHorizontal: 10,
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+  },
+  homeCenter: {
+    width: '100%',
+    flex: 0,
+    paddingLeft: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 14,
+  },
+  homeRight: {
+    width: '100%',
+    padding: 0,
+    marginTop: 14,
+    justifyContent: 'center',
   },
   left: {
-    // borderRadius: 3,
     flexGrow: 0,
     flexShrink: 0,
   },
@@ -69,9 +75,6 @@ const styles = createStyle({
     flexShrink: 1,
     paddingLeft: 5,
     height: '100%',
-    // justifyContent: 'space-evenly',
-    // height: 48,
-    // backgroundColor: 'rgba(0, 0, 0, .1)',
   },
   right: {
     flexDirection: 'row',
@@ -81,9 +84,4 @@ const styles = createStyle({
     paddingLeft: 5,
     paddingRight: 5,
   },
-  // row: {
-  //   flexDirection: 'row',
-  //   flexGrow: 0,
-  //   flexShrink: 0,
-  // },
 })

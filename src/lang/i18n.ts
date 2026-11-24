@@ -21,7 +21,7 @@ export declare interface I18n {
   t: (key: keyof Message, val?: TranslateValues) => string
 }
 
-let locale: Langs = 'zh_cn'
+let locale: Langs = 'zh_tw'
 
 let i18n: I18n
 
@@ -40,7 +40,7 @@ const hookTools = {
 }
 
 const useI18n = () => {
-  const [locale, updateLocale] = useState(i18n?.locale ?? 'en_us')
+  const [locale, updateLocale] = useState(i18n?.locale ?? 'zh_tw')
   // console.log('hook run')
   useEffect(() => {
     const hook: Hook = (locale) => {
@@ -65,7 +65,7 @@ const createI18n = (_locale: Langs = locale): I18n => {
 
   return i18n = {
     locale,
-    fallbackLocale: 'zh_cn',
+    fallbackLocale: 'zh_tw',
     availableLocales: Object.keys(messages) as Langs[],
     messages,
     message: messages[locale],
