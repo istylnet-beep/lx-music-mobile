@@ -1,14 +1,6 @@
 // @flow
 
 import { Navigation } from 'react-native-navigation'
-
-import {
-  Home,
-  PlayDetail,
-  SonglistDetail,
-  Comment,
-  // Setting,
-} from '@/screens'
 import { Provider } from '@/store/Provider'
 
 import {
@@ -17,7 +9,6 @@ import {
   SONGLIST_DETAIL_SCREEN,
   COMMENT_SCREEN,
   SYNC_MODE_MODAL,
-  // SETTING_SCREEN,
 } from './screenNames'
 import SyncModeModal from './components/SyncModeModal'
 
@@ -36,12 +27,22 @@ function WrappedComponent(Component: any) {
 }
 
 export default () => {
+  // Resolve application screens only when registration runs. Home imports
+  // navigation, while navigation imports this module; a top-level screens
+  // import creates a circular dependency and can leave the screens namespace
+  // undefined during module initialization.
+  const {
+    Home,
+    PlayDetail,
+    SonglistDetail,
+    Comment,
+  } = require('@/screens')
+
   Navigation.registerComponent(HOME_SCREEN, () => WrappedComponent(Home))
   Navigation.registerComponent(PLAY_DETAIL_SCREEN, () => WrappedComponent(PlayDetail))
   Navigation.registerComponent(SONGLIST_DETAIL_SCREEN, () => WrappedComponent(SonglistDetail))
   Navigation.registerComponent(COMMENT_SCREEN, () => WrappedComponent(Comment))
   Navigation.registerComponent(SYNC_MODE_MODAL, () => WrappedComponent(SyncModeModal))
-  // Navigation.registerComponent(SETTING_SCREEN, () => WrappedComponent(Setting))
 
   console.info('All screens have been registered...')
 }
