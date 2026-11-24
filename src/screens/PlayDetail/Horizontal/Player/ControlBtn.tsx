@@ -57,8 +57,8 @@ const TogglePlayBtn = ({ size }: { size: number }) => {
       focusable
       style={[styles.cotrolBtn, { width: size, height: size }, focused && styles.focusedBtn]}
       activeOpacity={0.8}
-      onFocus={() => setFocused(true)}
-      onBlur={() => setFocused(false)}
+      onFocus={() => { setFocused(true) }}
+      onBlur={() => { setFocused(false) }}
       onPress={togglePlay}
     >
       <Icon name={isPlay ? 'pause' : 'play'} color={focused ? theme['c-primary-font-active'] : theme['c-button-font']} rawSize={size * 0.7} />
