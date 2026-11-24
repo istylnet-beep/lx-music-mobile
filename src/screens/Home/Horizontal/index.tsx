@@ -6,8 +6,8 @@ import Header from './Header'
 import Main from './Main'
 import { createStyle } from '@/utils/tools'
 import { ThemeContext } from '@/store/theme/state'
-import { Themes } from '@/theme'
-import { buildActiveThemeColors } from '@/theme/themes'
+import Themes from '@/theme/themes/themes'
+import { buildActiveThemeColors } from '@/theme/themes/index'
 
 // TV mode uses one fixed black/ice-blue palette regardless of the mobile theme preference.
 const blackTheme = Themes.find(theme => theme.id === 'black')
